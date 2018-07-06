@@ -15,9 +15,9 @@ public class Project1 {
   private static boolean printOpt = false;
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
+    checkPrint(args);   //check if -print exist
 
     ArrayList listOfArgs = new ArrayList<String>(Arrays.asList(args));
-    checkPrint(args);   //check if -print exist
     listOfArgs = removeOption(listOfArgs); // remove all options from the argument
     checkArgs(listOfArgs); // check the number of arguments
 
@@ -27,6 +27,7 @@ public class Project1 {
     String startTime = (String) listOfArgs.get(3) + " " + (String) listOfArgs.get(4);
     String endTime = (String) listOfArgs.get(5) + " " + (String) listOfArgs.get(6);
 
+    checkName(customerName);
 
     PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
 
@@ -39,7 +40,16 @@ public class Project1 {
     System.exit(1);
   }
 
-  /**
+    private static void checkName(String customerName) {
+      System.out.println(customerName);
+      if(!customerName.matches("[a-z A-Z]+"))
+      {
+          System.err.println("Invalid customer name");
+          System.exit(1);
+      }
+    }
+
+    /**
    * Here we are removing the option arguments because they can appear anywhere on the command line.
    * So it will be easier for us to get the right arguments
    * @param arrayList
