@@ -13,6 +13,13 @@ public class PhoneCall extends AbstractPhoneCall {
   private String startTime;
   private String endTime;
 
+    /**
+     * Constructor that takes in the phone number and time of the phone call
+     * @param callerNumber  The phone number of the caller
+     * @param calleeNumber  The phone number of the callee
+     * @param startTime     The start date and time of the call
+     * @param endTime       The end date and time of the call
+     */
   PhoneCall(String callerNumber, String calleeNumber, String startTime, String endTime)
   {
     this.callerNumber = callerNumber;

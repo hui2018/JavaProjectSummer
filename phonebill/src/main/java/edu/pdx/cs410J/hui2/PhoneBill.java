@@ -7,11 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 
+/**
+ * A phone bill class that contains the customer name and multiple phone calls
+ */
 public class PhoneBill extends AbstractPhoneBill{
-    //Collection<PhoneCall> calls = new ArrayList<>();
     List<AbstractPhoneCall> phoneCalls;
-    String customer;
+    private String customer;
 
+    /**
+     * The constructor will set the customer name and
+     * @param customer customer name
+     * @param phoneCall a phone call that contains different variables
+     */
     PhoneBill(String customer, PhoneCall phoneCall)
     {
         this.customer = customer;
@@ -19,24 +26,30 @@ public class PhoneBill extends AbstractPhoneBill{
         addPhoneCall(phoneCall);
     }
 
-    public PhoneBill() {
-
-    }
-
+    /**
+     *
+     * @return It returns the customer name
+     */
     @Override
     public String getCustomer() {
-        //return null;
         return customer;
     }
 
+    /**
+     *
+     * @param abstractPhoneCall it takes a phone call and adds it to the list of phone call
+     */
     @Override
     public void addPhoneCall(AbstractPhoneCall abstractPhoneCall) {
         phoneCalls.add(abstractPhoneCall);
     }
 
+    /**
+     *
+     * @return returns a list of all the phone calls from one customer
+     */
     @Override
     public Collection getPhoneCalls() {
-        //return null;
         return phoneCalls;
     }
 }

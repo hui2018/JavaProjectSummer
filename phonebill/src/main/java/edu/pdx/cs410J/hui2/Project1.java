@@ -28,6 +28,10 @@ public class Project1 {
     String endTime = (String) listOfArgs.get(5) + " " + (String) listOfArgs.get(6);
 
     checkName(customerName);
+    checkCallerPhone(callerNumber);
+    checkCalleePhone(calleeNumber);
+    checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));
+    checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));
 
     PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
 
@@ -40,14 +44,57 @@ public class Project1 {
     System.exit(1);
   }
 
-    private static void checkName(String customerName) {
-      System.out.println(customerName);
+    private static void checkName(String customerName)
+    {
       if(!customerName.matches("[a-z A-Z]+"))
       {
           System.err.println("Invalid customer name");
           System.exit(1);
       }
     }
+    private static void checkCallerPhone(String phoneNumber)
+    {
+      if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))
+      {
+        System.err.println("Invalid caller phone number");
+        System.exit(1);
+      }
+    }
+    private static void checkCalleePhone(String phoneNumber)
+    {
+      if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))
+      {
+        System.err.println("Invalid callee phone number");
+        System.exit(1);
+      }
+    }
+    private static void checkStartTime(String startDate, String startTime)
+    {
+      if(!startDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})"))
+      {
+        System.err.println("Invalid start date");
+        System.exit(1);
+      }
+      else if(!startTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+      {
+        System.err.println("Invalid start time");
+        System.exit(1);
+      }
+    }
+    private static void checkEndTime(String endDate, String endTime)
+    {
+      if(!endDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})"))
+      {
+        System.err.println("Invalid start date");
+        System.exit(1);
+      }
+      else if(!endTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+      {
+        System.err.println("Invalid start time");
+        System.exit(1);
+      }
+    }
+
 
     /**
    * Here we are removing the option arguments because they can appear anywhere on the command line.
@@ -59,7 +106,6 @@ public class Project1 {
   {
     if(arrayList.contains("-print"))
     {
-      printOpt = true;
       arrayList.remove(arrayList.indexOf("-print"));
     }
     return arrayList;
@@ -131,7 +177,12 @@ public class Project1 {
 
   static public void readMe()
   {
-    System.out.println("usage: java edu.pdx.cs410J.hui2.Project1 [options] <args>\n" +
+    System.out.println("Name: Hui Yu Sim \nProject: 1 Designing a Phone Bill Application\n\n" +
+            "The Purpose of this programming assignment is to create a phone bill that\n" +
+            "has customer name and consists of multiple phone calls.\n" +
+            "The program will take in arguments from the command line and check if the arguments are correct.\n" +
+            "Please follow the following steps to insure program will run correctly.\n");
+    System.out.println("usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
             "args are (in this order):\n" +
               "\tcustomer           Person whose phone bill we’re modeling\n" +
               "\tcallerNumber       Phone number of caller\n" +
