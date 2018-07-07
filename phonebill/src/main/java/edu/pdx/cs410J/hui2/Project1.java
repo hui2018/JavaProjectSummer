@@ -8,14 +8,14 @@ import java.util.Stack;
 import java.util.Collection;
 
 /**
+ * Created by Hui Yu Sim
+ * Project 1
  * The main class for the CS410J Phone Bill Project
  */
 public class Project1 {
-
-  private static boolean printOpt = false;
+  private static boolean printOpt = false;  // We are to check if we need to print out the information at the end
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
-    checkPrint(args);   //check if -print exist
 
     ArrayList listOfArgs = new ArrayList<String>(Arrays.asList(args));
     listOfArgs = removeOption(listOfArgs); // remove all options from the argument
@@ -44,15 +44,29 @@ public class Project1 {
     System.exit(1);
   }
 
-    private static void checkName(String customerName)
+  /**
+   * Check that the customer name can only contain letters and no numbers or symbols.
+   * The name will also allow double quote and a space so that it can have a full name
+   * when entering the customer name.
+   * @param customerName  Name of the customer stored in a string
+   */
+  private static void checkName(String customerName)
+  {
+    if(!customerName.matches("[a-z A-Z]+"))
     {
-      if(!customerName.matches("[a-z A-Z]+"))
-      {
-          System.err.println("Invalid customer name");
-          System.exit(1);
-      }
+      System.err.println("Invalid customer name");
+      System.exit(1);
     }
-    private static void checkCallerPhone(String phoneNumber)
+  }
+
+  /**
+   * We want to check if the phone number of caller is in the correct format
+   * if the format is incorrect then we just want to tell the user that
+   * the callee phone number is invalid.
+   * @param phoneNumber caller's phone number that is stored in a string and needs to be
+   *                    in a format of nnn-nnn-nnnn
+   */
+  private static void checkCallerPhone(String phoneNumber)
     {
       if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))
       {
@@ -60,7 +74,15 @@ public class Project1 {
         System.exit(1);
       }
     }
-    private static void checkCalleePhone(String phoneNumber)
+
+  /**
+   * We want to check if the phone number of callee is in the correct format
+   * if the format is incorrect then we just want to tell the user that
+   * the callee phone number is invalid.
+   * @param phoneNumber callee's phone number that is stored in a string and needs to be
+   *                    in a format of nnn-nnn-nnnn
+   */
+  private static void checkCalleePhone(String phoneNumber)
     {
       if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))
       {
@@ -68,6 +90,15 @@ public class Project1 {
         System.exit(1);
       }
     }
+
+  /**
+   * In this function we are checking if the start date and start time is in the format that we want.
+   * If the format is not what we want then we want to tell the user what the problem is
+   * then exit out of the program.
+   * @param startDate start date that is stored in a string in the format of nn/nn/nnnn
+   * @param startTime start time that is stored in a string in the format of nn:nn
+   * Where the "n" are integers.
+   */
     private static void checkStartTime(String startDate, String startTime)
     {
       if(!startDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})"))
@@ -81,6 +112,15 @@ public class Project1 {
         System.exit(1);
       }
     }
+
+  /**
+   * In this function we are checking if the end date and end time is in the format that we want.
+   * If the format is not what we want then we want to tell the user what the problem is
+   * then exit out of the program.
+   * @param endDate end date that is stored in a string in the format of nn/nn/nnnn
+   * @param endTime end time that is stored in a string in the format of nn:nn
+   * Where the "n" are integers.
+   */
     private static void checkEndTime(String endDate, String endTime)
     {
       if(!endDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})"))
@@ -95,18 +135,19 @@ public class Project1 {
       }
     }
 
-
-    /**
-   * Here we are removing the option arguments because they can appear anywhere on the command line.
-   * So it will be easier for us to get the right arguments
-   * @param arrayList
-   * @return
+  /**
+   * Here we are removing the option arguments because they can appear anywhere on the command line,
+   * so it will be easier for us to get the right arguments. We want to then turn the print option on
+   * with a boolean so that it will just run the print function if -print is found on the command line
+   * @param arrayList All of the array of arguments from the command line
+   * @return It will return the array list without the -print command
    */
   public static ArrayList removeOption(ArrayList arrayList)
   {
     if(arrayList.contains("-print"))
     {
       arrayList.remove(arrayList.indexOf("-print"));
+      printOpt = true;
     }
     return arrayList;
   }
@@ -117,7 +158,7 @@ public class Project1 {
    * The second condition is to check if the argument size is greater than 7 the reason is because
    * start time and end time consists of two arguments each so that the total argument is 7
    * The last condition is to make sure that there is a total of 7 arguments.
-   * @param numArgs
+   * @param numArgs array list without the print option
    */
   public static void checkArgs(ArrayList numArgs)
   {
@@ -136,32 +177,19 @@ public class Project1 {
     }
 
   }
-
   /**
-   * we want to check if the -print is the first argument in command line.
-   * Since we are checking if -README is in the argument it will just exit without problem.
-   * So, we can just check the first argument in the command line and force user to type it in the first
-   * command line so that it doesn't messed up the argument.
-   * @param numArgs
+   * We will print out the information if the -print option is set in the command line
+   * @param customer object that contains the customer information
    */
-  public static void checkPrint(String[] numArgs)
-  {
-    for(int i = 0; i<numArgs.length; ++i)
-    {
-      if (numArgs[i].equals("-print"))
-      {
-        printOpt = true;
-      }
-    }
-  }
   public static void printInfo(PhoneBill customer)
   {
       System.out.println("Custom: " + customer.getCustomer() + "\n" + customer.getPhoneCalls());
   }
 
   /**
-   * These functions are to check if any of the arguments on the command line contains -README
+   * This function is to check if any of the arguments on the command line contains -README
    * and if it does, then we want to just run the readMe function and exit out of the program
+   * @param args list of arguments from the command line
    */
   public static void checkReadMe(String[]args)
   {
@@ -175,6 +203,10 @@ public class Project1 {
     }
   }
 
+  /**
+   * This function will print out the project information and what is required of the user in order to get th
+   * program to run successfully.
+   */
   static public void readMe()
   {
     System.out.println("Name: Hui Yu Sim \nProject: 1 Designing a Phone Bill Application\n\n" +
