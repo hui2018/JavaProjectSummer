@@ -37,11 +37,11 @@ public class PhoneBill extends AbstractPhoneBill{
 
     /**
      *
-     * @param abstractPhoneCall it takes a phone call and adds it to the list of phone call
+     * @param addCall it takes a phone call and adds it to the list of phone call
      */
     @Override
-    public void addPhoneCall(AbstractPhoneCall abstractPhoneCall) {
-        phoneCalls.add(abstractPhoneCall);
+    public void addPhoneCall(AbstractPhoneCall addCall) {
+        phoneCalls.add(addCall);
     }
 
     /**

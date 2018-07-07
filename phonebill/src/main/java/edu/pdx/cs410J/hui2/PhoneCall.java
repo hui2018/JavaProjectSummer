@@ -28,28 +28,39 @@ public class PhoneCall extends AbstractPhoneCall {
     this.endTime = endTime;
   }
 
+    /**
+     *
+     * @return it returns the caller's phone number
+     */
   @Override
   public String getCaller() {
-
-    //throw new UnsupportedOperationException("This method is not implemented yet");
     return callerNumber;
   }
 
+    /**
+     *
+     * @return it returns the callee's phone number
+     */
   @Override
   public String getCallee() {
-    //return "This method is not implemented yet";
     return calleeNumber;
   }
 
+    /**
+     *
+     * @return It returns the start date and time
+     */
   @Override
   public String getStartTimeString() {
-    //throw new UnsupportedOperationException("This method is not implemented yet");
     return startTime;
   }
 
+    /**
+     *
+     * @return It returns the end date and time 
+     */
   @Override
   public String getEndTimeString() {
-    //throw new UnsupportedOperationException("This method is not implemented yet");
     return endTime;
   }
 /*
