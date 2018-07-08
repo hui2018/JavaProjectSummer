@@ -12,7 +12,7 @@ import java.util.Collection;
  * Project 1
  * The main class for the CS410J Phone Bill Project
  */
-public class Project1 {
+public class Project2 {
   private static boolean printOpt = false;  // We are to check if we need to print out the information at the end
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
