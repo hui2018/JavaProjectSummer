@@ -57,7 +57,7 @@ public class PhoneCall extends AbstractPhoneCall {
 
     /**
      *
-     * @return It returns the end date and time 
+     * @return It returns the end date and time
      */
   @Override
   public String getEndTimeString() {

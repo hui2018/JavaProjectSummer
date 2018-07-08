@@ -37,10 +37,6 @@ public class Project1 {
 
     if(printOpt)   //this will be at the very end
       printInfo(bill);
-
-    //Collection<PhoneCall> phoneCalls = bill.getPhoneCalls();
-
-
     System.exit(1);
   }
 
@@ -125,12 +121,12 @@ public class Project1 {
     {
       if(!endDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/(19|20)([0-9]{2})"))
       {
-        System.err.println("Invalid start date");
+        System.err.println("Invalid end date");
         System.exit(1);
       }
       else if(!endTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
       {
-        System.err.println("Invalid start time");
+        System.err.println("Invalid end time");
         System.exit(1);
       }
     }
