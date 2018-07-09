@@ -28,9 +28,9 @@ public class TextParser implements PhoneBillParser {
             while((check = bRead.readLine()) != null)
             {
                 list = check.split(splitby);
+                checkFileName(list[0]);
+                checkFileInfo(list);
 
-                //checkFileInfo(list);
-                checkName(list[0]);
                 if(firstCheck)
                 {
                     firstCheck = false;
@@ -67,6 +67,14 @@ public class TextParser implements PhoneBillParser {
             return true;
         }
         return false;
+    }
+    public void checkFileName(String fileCustomerName)
+    {
+        if(!fileCustomerName.equals(commandCustomerName))
+        {
+            System.err.println("The customer name from file does not match with the input name");
+            System.exit(1);
+        }
     }
 
     /**
@@ -167,7 +175,7 @@ public class TextParser implements PhoneBillParser {
         String startTime;
         String endDate;
         String endTime;
-        System.out.println(list[0]);
+
         checkName(list[0]);
         checkCallerPhone(list[1]);
         checkCalleePhone(list[2]);

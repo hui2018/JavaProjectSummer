@@ -31,7 +31,6 @@ public class Project2 {
       //check if file exist of not
       if(parser.checkFile())
       {
-        System.out.println("File found");
         oldPhoneBill = parser.parse();
         //AbstractPhoneBill onePhoneBill = parser.parse();
       }
