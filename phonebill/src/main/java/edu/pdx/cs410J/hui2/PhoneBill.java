@@ -25,6 +25,9 @@ public class PhoneBill extends AbstractPhoneBill{
         phoneCalls = new ArrayList<AbstractPhoneCall>();
         addPhoneCall(phoneCall);
     }
+    PhoneBill()
+    {
+        }
 
     /**
      *

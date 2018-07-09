@@ -14,12 +14,34 @@ import java.util.Collection;
  */
 public class Project2 {
   private static boolean printOpt = false;  // We are to check if we need to print out the information at the end
+  private static boolean textParseDump = false; //checking if textfile is in commandline
+  public static String fileName; //Store the file name
+  public static AbstractPhoneBill oldPhoneBill;
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
 
     ArrayList listOfArgs = new ArrayList<String>(Arrays.asList(args));
     listOfArgs = removeOption(listOfArgs); // remove all options from the argument
     checkArgs(listOfArgs); // check the number of arguments
+
+    if(textParseDump)
+    {
+      TextParser parser = new TextParser();
+      parser.getFile(fileName, (String) listOfArgs.get(0));
+      //check if file exist of not
+      if(parser.checkFile())
+      {
+        System.out.println("File found");
+        oldPhoneBill = parser.parse();
+        //AbstractPhoneBill onePhoneBill = parser.parse();
+      }
+      //create empty PhoneBill new file with that command line
+      else
+      {
+        System.out.println("File does not exist, creating new file");
+        oldPhoneBill = new PhoneBill();
+      }
+    }
 
     String customerName = (String) listOfArgs.get(0);
     String callerNumber = (String) listOfArgs.get(1);
@@ -145,6 +167,13 @@ public class Project2 {
       arrayList.remove(arrayList.indexOf("-print"));
       printOpt = true;
     }
+    if(arrayList.contains("-textFile"))
+    {
+      arrayList.remove(arrayList.indexOf("-textFile"));
+      fileName = (String) arrayList.get(0);
+      arrayList.remove(arrayList.get(0));
+      textParseDump = true;
+    }
     return arrayList;
   }
 
@@ -210,7 +239,7 @@ public class Project2 {
             "has customer name and consists of multiple phone calls.\n" +
             "The program will take in arguments from the command line and check if the arguments are correct.\n" +
             "Please follow the following steps to insure program will run correctly.\n");
-    System.out.println("usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
+    System.out.println("usage: java edu.pdx.cs410J.<login-id>.Project2 [options] <args>\n" +
             "args are (in this order):\n" +
               "\tcustomer           Person whose phone bill we’re modeling\n" +
               "\tcallerNumber       Phone number of caller\n" +
@@ -218,6 +247,7 @@ public class Project2 {
               "\tstartTime          Date and time call began (24-hour time)\n" +
               "\tendTime            Date and time call ended (24-hour time)\n" +
             "options are (options may appear in any order):\n" +
+              "\t-textFile file     Where to read/write the phone bill\n" +
               "\t-print             Prints a description of the new phone call\n" +
               "\t-README            Prints a README for this project and exits\n" +
             "Date and time should be in the format: mm/dd/yyyy hh:mm");
