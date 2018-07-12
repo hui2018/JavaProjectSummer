@@ -1,4 +1,5 @@
 package edu.pdx.cs410J.hui2;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -17,31 +18,13 @@ public class Project2 {
   private static boolean textParseDump = false; //checking if textfile is in commandline
   public static String fileName; //Store the file name
   public static AbstractPhoneBill oldPhoneBill;
+  public static boolean addOldPhoneBill = false;
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
 
     ArrayList listOfArgs = new ArrayList<String>(Arrays.asList(args));
     listOfArgs = removeOption(listOfArgs); // remove all options from the argument
     checkArgs(listOfArgs); // check the number of arguments
-
-    if(textParseDump)
-    {
-      TextParser parser = new TextParser();
-      parser.getFile(fileName, (String) listOfArgs.get(0));
-      //check if file exist of not
-      if(parser.checkFile())
-      {
-        oldPhoneBill = parser.parse();
-        //AbstractPhoneBill onePhoneBill = parser.parse();
-      }
-      //create empty PhoneBill new file with that command line
-      else
-      {
-        System.out.println("File does not exist, creating new file");
-        oldPhoneBill = new PhoneBill();
-      }
-    }
-
     String customerName = (String) listOfArgs.get(0);
     String callerNumber = (String) listOfArgs.get(1);
     String calleeNumber = (String) listOfArgs.get(2);
@@ -54,10 +37,41 @@ public class Project2 {
     checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));
     checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));
 
+    if(textParseDump)
+    {
+      TextParser parser = new TextParser();
+      parser.getFile(fileName, (String) listOfArgs.get(0));
+      //check if file exist of not
+      if(parser.checkFile())
+      {
+        //addOldPhoneBill = true;
+        oldPhoneBill = parser.parse();
+        //AbstractPhoneBill onePhoneBill = parser.parse();
+      }
+      //create empty PhoneBill new file with that command line
+      else
+      {
+        System.out.println("File does not exist, creating new file");
+        parser.createFile(fileName);
+      }
+    }
+
     PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
+    if(textParseDump)
+    {
+      TextDumper dumper = new TextDumper(customerName, callerNumber, calleeNumber, startTime, endTime);
+      dumper.getFile(fileName);
+      try {
+        dumper.dump(oldPhoneBill);
+        oldPhoneBill = dumper.returnPhoneBill();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
 
     if(printOpt)   //this will be at the very end
       printInfo(bill);
+    System.out.println(oldPhoneBill.toString());
     System.exit(1);
   }
 

@@ -28,8 +28,32 @@ public class TextParser implements PhoneBillParser {
             while((check = bRead.readLine()) != null)
             {
                 list = check.split(splitby);
+
+                String splitBySpace = " ";
+
+                String startDate;
+                String startTime;
+                String endDate;
+                String endTime;
+
+                checkName(list[0]);
+
+                checkCallerPhone(list[1]);
+                checkCalleePhone(list[2]);
+
+                //Check start date and time
+                String [] startList = list[3].split(splitBySpace);
+                startDate = startList[0];
+                startTime = startList[1];
+                //check end date and time
+                String [] endList = list[4].split(splitBySpace);
+                endDate = endList[0];
+                endTime = endList[1];
+                checkStartTime(startDate, startTime);
+                checkEndTime(endDate, endTime);
+
                 checkFileName(list[0]);
-                checkFileInfo(list);
+                //checkFileInfo(list);
 
                 if(firstCheck)
                 {
@@ -68,6 +92,20 @@ public class TextParser implements PhoneBillParser {
         }
         return false;
     }
+    public void createFile(String fileName)
+    {
+        File file = new File(fileName);
+        try {
+            if(file.createNewFile())
+            {
+                System.out.println("File successfully created");
+            }
+        } catch (IOException e) {
+            System.err.println("File can not be created due to incorrect path");
+            e.printStackTrace();
+        }
+    }
+
     public void checkFileName(String fileCustomerName)
     {
         if(!fileCustomerName.equals(commandCustomerName))
