@@ -16,7 +16,7 @@ import java.util.Collection;
  * Project 1
  * The main class for the CS410J Phone Bill Project
  */
-public class Project2 {
+public class Project3 {
   private static boolean printOpt = false;  // We are to check if we need to print out the information at the end
   private static boolean textParseDump = false; //checking if textfile is in commandline
   public static String fileName; //Store the file name
