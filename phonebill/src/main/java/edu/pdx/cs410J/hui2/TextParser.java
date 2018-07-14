@@ -7,12 +7,26 @@ import edu.pdx.cs410J.PhoneBillParser;
 import java.io.*;
 
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+/**
+ * class that reads from the file
+ */
 public class TextParser implements PhoneBillParser {
     String fileName = null;
     File filePath = null;
     private String commandCustomerName = null;
     String [] list;
+
+    /**
+     * We are reading the file name and return the object of phonebill. We are doing a lot of checking in here,
+     * such as the checking name, checking file, checking date, and checking phone. We are also storing line by line
+     * into the string of array and split it by a comma that is contain in the file. With that comma in the file its
+     * easier to split them and store them in the array list.
+     * @return It returns the object of phonebill after it finish reading the text file
+     */
     @Override
     public AbstractPhoneBill parse() {
         AbstractPhoneBill phoneBill = null;
@@ -40,20 +54,21 @@ public class TextParser implements PhoneBillParser {
 
                 checkCallerPhone(list[1]);
                 checkCalleePhone(list[2]);
+                formatter(list[3], list[4]);
 
                 //Check start date and time
                 String [] startList = list[3].split(splitBySpace);
                 startDate = startList[0];
                 startTime = startList[1];
+
                 //check end date and time
                 String [] endList = list[4].split(splitBySpace);
                 endDate = endList[0];
                 endTime = endList[1];
+
                 checkStartTime(startDate, startTime);
                 checkEndTime(endDate, endTime);
-
                 checkFileName(list[0]);
-                //checkFileInfo(list);
 
                 if(firstCheck)
                 {
@@ -64,9 +79,7 @@ public class TextParser implements PhoneBillParser {
                 {
                     phoneBill.addPhoneCall(new PhoneCall(list[1], list[2], list[3], list[4]));
                 }
-
             }
-
         }
         catch (FileNotFoundException e) {
             System.out.println("error");
@@ -78,12 +91,25 @@ public class TextParser implements PhoneBillParser {
         }
         return phoneBill;
     }
+
+    /**
+     * This function is to store the file name and customer name into this constructor so that we
+     * can check if file exist and if the customer name matches from command line and from the file
+     * @param fileName  string that stores the file name from the command line
+     * @param customerName string that stores the customer's name from the command line
+     */
     public void getFile(String fileName, String customerName)
     {
         this.fileName = fileName;
         filePath = new File(fileName);
         this.commandCustomerName = customerName;
     }
+
+    /**
+     * we want to check if the file path exist or not. if it exist we return true if not false
+     * so we can decide if we need to create a file for it or not.
+     * @return If file exist return true else return false
+     */
     public boolean checkFile()
     {
         if(filePath.exists())
@@ -92,6 +118,12 @@ public class TextParser implements PhoneBillParser {
         }
         return false;
     }
+
+    /**
+     * We want to create a new file if the file path that the user entered doesn't exist. I am making it
+     * so that the path is already correct and I just create a new file namd with what was input in the first place
+     * @param fileName The file name/path that is entered in the command line
+     */
     public void createFile(String fileName)
     {
         File file = new File(fileName);
@@ -103,9 +135,15 @@ public class TextParser implements PhoneBillParser {
         } catch (IOException e) {
             System.err.println("File can not be created due to incorrect path");
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
+    /**
+     * check the file name and the name that is entered from the command line is the same,
+     * if its not the same we want to return an error
+     * @param fileCustomerName The file customer's name to check with the customer's name that is input from command line
+     */
     public void checkFileName(String fileCustomerName)
     {
         if(!fileCustomerName.equals(commandCustomerName))
@@ -205,28 +243,19 @@ public class TextParser implements PhoneBillParser {
             System.exit(1);
         }
     }
-    public static void checkFileInfo(String[] list)
-    {
-        String splitBySpace = " ";
-
-        String startDate;
-        String startTime;
-        String endDate;
-        String endTime;
-
-        checkName(list[0]);
-        checkCallerPhone(list[1]);
-        checkCalleePhone(list[2]);
-
-        //Check start date and time
-        String [] startList = list[3].split(splitBySpace);
-        startDate = startList[0];
-        startTime = startList[1];
-        //check end date and time
-        String [] endList = list[4].split(splitBySpace);
-        endDate = endList[0];
-        endTime = endList[1];
-        checkStartTime(startDate, startTime);
-        checkEndTime(endDate, endTime);
+    public static void formatter(String startTime, String endTime){
+        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        try {
+            Date start = startFormat.parse(startTime);
+            Date end = startFormat.parse(endTime);
+            if(start.compareTo(end) > 0)
+            {
+                System.err.println("Start time is after end time in the text file, please modified the date/time");
+                System.exit(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }

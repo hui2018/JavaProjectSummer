@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.ArrayList;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import java.util.Stack;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import java.util.Collection;
 
@@ -18,7 +21,6 @@ public class Project2 {
   private static boolean textParseDump = false; //checking if textfile is in commandline
   public static String fileName; //Store the file name
   public static AbstractPhoneBill oldPhoneBill;
-  public static boolean addOldPhoneBill = false;
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
 
@@ -36,6 +38,7 @@ public class Project2 {
     checkCalleePhone(calleeNumber);
     checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));
     checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));
+    formatter(startTime, endTime);
 
     if(textParseDump)
     {
@@ -44,9 +47,7 @@ public class Project2 {
       //check if file exist of not
       if(parser.checkFile())
       {
-        //addOldPhoneBill = true;
         oldPhoneBill = parser.parse();
-        //AbstractPhoneBill onePhoneBill = parser.parse();
       }
       //create empty PhoneBill new file with that command line
       else
@@ -54,26 +55,42 @@ public class Project2 {
         System.out.println("File does not exist, creating new file");
         parser.createFile(fileName);
       }
-    }
-
-    PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
-    if(textParseDump)
-    {
       TextDumper dumper = new TextDumper(customerName, callerNumber, calleeNumber, startTime, endTime);
       dumper.getFile(fileName);
       try {
-        dumper.dump(oldPhoneBill);
-        oldPhoneBill = dumper.returnPhoneBill();
+          dumper.dump(oldPhoneBill);
+          oldPhoneBill = dumper.returnPhoneBill();
       } catch (IOException e) {
-        e.printStackTrace();
-      }
+            e.printStackTrace();
+        }
     }
 
+    PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
     if(printOpt)   //this will be at the very end
       printInfo(bill);
-    System.out.println(oldPhoneBill.toString());
     System.exit(1);
   }
+
+    /**
+     * this function is to format the date so that we can use it to compare the values between start and end time
+     * @param startTime String that contains the start date and time
+     * @param endTime String that contains the end date and time
+     */
+    public static void formatter(String startTime, String endTime){
+        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        try {
+            Date start = startFormat.parse(startTime);
+            Date end = startFormat.parse(endTime);
+            if(start.compareTo(end) > 0)
+            {
+                System.err.println("Start time is after end time, please modified the date/time");
+                System.exit(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
   /**
    * Check that the customer name can only contain letters and no numbers or symbols.

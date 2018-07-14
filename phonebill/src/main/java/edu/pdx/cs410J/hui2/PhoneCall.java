@@ -65,7 +65,7 @@ public class PhoneCall extends AbstractPhoneCall {
   }
 /*
   public static Date formatter(String time){
-    SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
     Date date = null;
     try {
       date = startFormat.parse(time);
