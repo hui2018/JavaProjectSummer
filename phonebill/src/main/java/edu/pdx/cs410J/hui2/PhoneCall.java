@@ -7,12 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class PhoneCall extends AbstractPhoneCall {
+public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall> {
   private String callerNumber;
   private String calleeNumber;
   private String startTime;
   private String endTime;
-
+  public Date dateStartTime;
+  public Date dateEndTime;
     /**
      * Constructor that takes in the phone number and time of the phone call
      * @param callerNumber  The phone number of the caller
@@ -26,8 +27,10 @@ public class PhoneCall extends AbstractPhoneCall {
     this.calleeNumber = calleeNumber;
     this.startTime = startTime;
     this.endTime = endTime;
+    formatter(startTime, endTime);
   }
-
+  PhoneCall()
+  {}
     /**
      *
      * @return it returns the caller's phone number
@@ -63,18 +66,37 @@ public class PhoneCall extends AbstractPhoneCall {
   public String getEndTimeString() {
     return endTime;
   }
-/*
-  public static Date formatter(String time){
-    SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-    Date date = null;
+  @Override
+  public Date getStartTime()
+  {
+    return dateStartTime;
+  }
+  @Override
+  public Date getEndTime()
+  {
+    return dateEndTime;
+  }
+
+  public Date formatter(String startTime, String endTime){
+    SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
     try {
-      date = startFormat.parse(time);
-      return date;
+      dateStartTime = startFormat.parse(startTime);
+      dateEndTime = startFormat.parse(endTime);
     } catch (ParseException e) {
       e.printStackTrace();
       System.exit(1);
     }
     return null;
   }
-  */
+
+  @Override
+  public int compareTo(PhoneCall o) {
+    int startCompare = this.getStartTime().compareTo(o.getStartTime());
+    if(startCompare != 0)
+      return startCompare;
+    int phoneCallerCompare = this.getCaller().compareTo(o.getCaller());
+    if(phoneCallerCompare != 0)
+      return phoneCallerCompare;
+    return 0;
+  }
 }

@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.AbstractPhoneCall;
+
 import java.util.Stack;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.Locale;
 
 import java.util.Collection;
 
@@ -19,8 +22,11 @@ import java.util.Collection;
 public class Project3 {
   private static boolean printOpt = false;  // We are to check if we need to print out the information at the end
   private static boolean textParseDump = false; //checking if textfile is in commandline
+  private static boolean prettyPrint = false;  //check if we are printing the phonebill
   public static String fileName; //Store the file name
+  public static String fileNamePretty; //Store the file name to print pretty to
   public static AbstractPhoneBill oldPhoneBill;
+  public static AbstractPhoneCall oldPhoneCall;
   public static void main(String[] args) {
     checkReadMe(args);  //check readMe first
 
@@ -30,15 +36,19 @@ public class Project3 {
     String customerName = (String) listOfArgs.get(0);
     String callerNumber = (String) listOfArgs.get(1);
     String calleeNumber = (String) listOfArgs.get(2);
-    String startTime = (String) listOfArgs.get(3) + " " + (String) listOfArgs.get(4);
-    String endTime = (String) listOfArgs.get(5) + " " + (String) listOfArgs.get(6);
+    String startTime = (String) listOfArgs.get(3) + " " + (String) listOfArgs.get(4) + " " + (String) listOfArgs.get(5);
+    String startTimeLabel = (String) listOfArgs.get(5);
+    String endTime = (String) listOfArgs.get(6) + " " + (String) listOfArgs.get(7)+ " " + (String) listOfArgs.get(8);
+    String endTimeLabel = (String) listOfArgs.get(8);
 
     checkName(customerName);
     checkCallerPhone(callerNumber);
     checkCalleePhone(calleeNumber);
     checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));
-    checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));
-    formatter(startTime, endTime);
+    checkEndTime((String) listOfArgs.get(6), (String) listOfArgs.get(7));
+    checkTimeLabel(startTimeLabel, endTimeLabel);
+
+    formatter(startTime, endTime, startTimeLabel, endTimeLabel);
 
     if(textParseDump)
     {
@@ -48,6 +58,11 @@ public class Project3 {
       if(parser.checkFile())
       {
         oldPhoneBill = parser.parse();
+
+
+        //Object[] test  = new String [10];
+        //test = oldPhoneBill.getPhoneCalls().toArray();
+        //System.out.println(test[0] +"\n" + test[3]);
       }
       //create empty PhoneBill new file with that command line
       else
@@ -66,25 +81,66 @@ public class Project3 {
     }
 
     PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
+    //oldPhoneBill.getPhoneCalls();
+
+/*
+    ArrayList<PhoneCall> phoneCallsTest = (ArrayList<PhoneCall>) oldPhoneBill.getPhoneCalls();
+    PrettyPrinter pretty = new PrettyPrinter(customerName, callerNumber, calleeNumber, startTime, endTime);
+    pretty.dump(phoneCallsTest);
+*/
+    if(prettyPrint) {
+      PrettyPrinter pretty = new PrettyPrinter(fileNamePretty);
+      try {
+        pretty.dump(oldPhoneBill);
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
     if(printOpt)   //this will be at the very end
       printInfo(bill);
     System.exit(1);
   }
+
+    public static void checkTimeLabel(String startLabel, String endLabel)
+    {
+      if(!startLabel.contains("am"))
+      {
+        if(!startLabel.contains("pm"))
+          System.out.println("1 Failed");
+      }
+      else if(!startLabel.contains("pm"))
+      {
+        if(!startLabel.contains("am"))
+          System.err.println("2 failed");
+      }
+      else if (!endLabel.contains("am"))
+      {
+        if(!endLabel.contains("pm"))
+          System.err.println("3 end failed");
+      }
+      else if(!endLabel.contains("pm"))
+      {
+        if(!endLabel.contains("am"))
+          System.err.println("4 end failed");
+      }
+    }
 
     /**
      * this function is to format the date so that we can use it to compare the values between start and end time
      * @param startTime String that contains the start date and time
      * @param endTime String that contains the end date and time
      */
-    public static void formatter(String startTime, String endTime){
-        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    public static void formatter(String startTime, String endTime, String startLabel, String endLabel){
+        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         try {
             Date start = startFormat.parse(startTime);
             Date end = startFormat.parse(endTime);
             if(start.compareTo(end) > 0)
             {
-                System.err.println("Start time is after end time, please modified the date/time");
-                System.exit(1);
+                  System.err.println("Start time is after end time, please modified the date/time");
+                  System.exit(1);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -100,7 +156,7 @@ public class Project3 {
    */
   private static void checkName(String customerName)
   {
-    if(!customerName.matches("[a-z A-Z]+"))
+    if(!customerName.matches("[a-z A-Z 0-9]+"))
     {
       System.err.println("Invalid customer name");
       System.exit(1);
@@ -154,7 +210,7 @@ public class Project3 {
         System.err.println("Invalid start date");
         System.exit(1);
       }
-      else if(!startTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+      else if(!startTime.matches("([0]?[1-9]|1[0-2]):[0-5][0-9]"))
       {
         System.err.println("Invalid start time");
         System.exit(1);
@@ -176,7 +232,7 @@ public class Project3 {
         System.err.println("Invalid end date");
         System.exit(1);
       }
-      else if(!endTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+      else if(!endTime.matches("([0]?[1-9]|1[0-2]):[0-5][0-9]"))
       {
         System.err.println("Invalid end time");
         System.exit(1);
@@ -199,10 +255,23 @@ public class Project3 {
     }
     if(arrayList.contains("-textFile"))
     {
+      int counter = 0;
+      counter = arrayList.indexOf("-textFile");
       arrayList.remove(arrayList.indexOf("-textFile"));
-      fileName = (String) arrayList.get(0);
-      arrayList.remove(arrayList.get(0));
+      fileName = (String) arrayList.get(counter);
+      //System.out.println(fileName);
+      arrayList.remove(arrayList.get(counter));
       textParseDump = true;
+    }
+    if(arrayList.contains("-pretty"))
+    {
+      int counter = 0;
+      counter = arrayList.indexOf("-pretty");
+      arrayList.remove(arrayList.indexOf("-pretty"));
+      fileNamePretty = (String) arrayList.get(counter);
+      arrayList.remove(arrayList.get(counter));
+      //System.out.println(fileNamePretty);
+      prettyPrint = true;
     }
     return arrayList;
   }
@@ -221,11 +290,11 @@ public class Project3 {
       System.err.println("Missing command line arguments");
       System.exit(1);
     }
-    else if(numArgs.size() > 7) {
+    else if(numArgs.size() > 9) {
       System.err.println("Too many arguments");
       System.exit(1);
     }
-    else if(numArgs.size() != 7)
+    else if(numArgs.size() != 9)
     {
       System.err.println("Not enough arguments");
       System.exit(1);
@@ -277,6 +346,8 @@ public class Project3 {
               "\tstartTime          Date and time call began (24-hour time)\n" +
               "\tendTime            Date and time call ended (24-hour time)\n" +
             "options are (options may appear in any order):\n" +
+              "\t-pretty file       Pretty print the phone bill to a text file" +
+                                    " or standard out (file -)\n" +
               "\t-textFile file     Where to read/write the phone bill\n" +
               "\t-print             Prints a description of the new phone call\n" +
               "\t-README            Prints a README for this project and exits\n" +

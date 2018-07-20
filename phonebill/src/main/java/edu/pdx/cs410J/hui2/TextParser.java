@@ -10,15 +10,18 @@ import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * class that reads from the file
  */
 public class TextParser implements PhoneBillParser {
+
     String fileName = null;
     File filePath = null;
     private String commandCustomerName = null;
     String [] list;
+    AbstractPhoneBill phoneBill;
 
     /**
      * We are reading the file name and return the object of phonebill. We are doing a lot of checking in here,
@@ -29,7 +32,7 @@ public class TextParser implements PhoneBillParser {
      */
     @Override
     public AbstractPhoneBill parse() {
-        AbstractPhoneBill phoneBill = null;
+        phoneBill = null;
         try
         {
             FileReader fRead = new FileReader(fileName);
@@ -39,54 +42,62 @@ public class TextParser implements PhoneBillParser {
             String customerName = "";
 
             boolean firstCheck = true;
-            while((check = bRead.readLine()) != null)
-            {
+            while((check = bRead.readLine()) != null) {
+
                 list = check.split(splitby);
 
                 String splitBySpace = " ";
 
                 String startDate;
                 String startTime;
+                String startLabel;
                 String endDate;
                 String endTime;
+                String endLabel;
 
+                if(list.length < 4)
+                {
+                    System.err.println("Bad information in text file");
+                    System.exit(1);
+                }
+                checkFileName(list[0]);
                 checkName(list[0]);
 
                 checkCallerPhone(list[1]);
                 checkCalleePhone(list[2]);
-                formatter(list[3], list[4]);
 
                 //Check start date and time
-                String [] startList = list[3].split(splitBySpace);
+                String[] startList = list[3].split(splitBySpace);
                 startDate = startList[0];
                 startTime = startList[1];
+                startLabel = startList[2];
 
                 //check end date and time
-                String [] endList = list[4].split(splitBySpace);
+                String[] endList = list[4].split(splitBySpace);
                 endDate = endList[0];
                 endTime = endList[1];
+                endLabel = endList[2];
 
+                //System.out.println(list[3]);
+                formatter(list[3], list[4]);
                 checkStartTime(startDate, startTime);
                 checkEndTime(endDate, endTime);
-                checkFileName(list[0]);
+                //formatter(list[3], list[4]);
 
-                if(firstCheck)
-                {
+                if (firstCheck) {
                     firstCheck = false;
-                    phoneBill = new PhoneBill(list[0], new PhoneCall(list[1],list[2],list[3],list[4]));
-                }
-                else
-                {
+                    phoneBill = new PhoneBill(list[0], new PhoneCall(list[1], list[2], list[3], list[4]));
+                } else {
                     phoneBill.addPhoneCall(new PhoneCall(list[1], list[2], list[3], list[4]));
                 }
             }
         }
         catch (FileNotFoundException e) {
-            System.out.println("error");
+            System.out.println("File not found");
             e.printStackTrace();
         }
         catch (IOException e) {
-            System.out.println("error2");
+            System.out.println("File path not found");
             e.printStackTrace();
         }
         return phoneBill;
@@ -161,7 +172,7 @@ public class TextParser implements PhoneBillParser {
      */
     private static void checkName(String customerName)
     {
-        if(!customerName.matches("[a-z A-Z]+"))
+        if(!customerName.matches("[a-z A-Z 0-9]+"))
         {
             System.err.println("Invalid customer name in the text file");
             System.exit(1);
@@ -215,7 +226,7 @@ public class TextParser implements PhoneBillParser {
             System.err.println("Invalid start date in text file");
             System.exit(1);
         }
-        else if(!startTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+        else if(!startTime.matches("([0]?[1-9]|1[0-2]):[0-5][0-9]"))
         {
             System.err.println("Invalid start time in text file");
             System.exit(1);
@@ -237,14 +248,14 @@ public class TextParser implements PhoneBillParser {
             System.err.println("Invalid end date in text file");
             System.exit(1);
         }
-        else if(!endTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))
+        else if(!endTime.matches("([0]?[1-9]|1[0-2]):[0-5][0-9]"))
         {
             System.err.println("Invalid end time in text file");
             System.exit(1);
         }
     }
     public static void formatter(String startTime, String endTime){
-        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         try {
             Date start = startFormat.parse(startTime);
             Date end = startFormat.parse(endTime);

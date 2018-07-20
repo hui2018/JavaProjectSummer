@@ -3,16 +3,16 @@ package edu.pdx.cs410J.hui2;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.AbstractPhoneCall;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * A phone bill class that contains the customer name and multiple phone calls
  */
 public class PhoneBill extends AbstractPhoneBill{
-    List<AbstractPhoneCall> phoneCalls;
+    //ArrayList<AbstractPhoneCall> phoneCalls;
+    ArrayList<PhoneCall> phoneCalls;
     private String customer;
+    ArrayList<PhoneCall> test = new ArrayList<>();
 
     /**
      * The constructor will set the customer name and
@@ -22,7 +22,8 @@ public class PhoneBill extends AbstractPhoneBill{
     PhoneBill(String customer, PhoneCall phoneCall)
     {
         this.customer = customer;
-        phoneCalls = new ArrayList<AbstractPhoneCall>();
+        //phoneCalls = new ArrayList<AbstractPhoneCall>();
+        phoneCalls = new ArrayList<PhoneCall>();
         addPhoneCall(phoneCall);
     }
     PhoneBill()
@@ -44,7 +45,8 @@ public class PhoneBill extends AbstractPhoneBill{
      */
     @Override
     public void addPhoneCall(AbstractPhoneCall addCall) {
-        phoneCalls.add(addCall);
+        phoneCalls.add((PhoneCall) addCall);
+
     }
 
     /**
@@ -53,6 +55,11 @@ public class PhoneBill extends AbstractPhoneBill{
      */
     @Override
     public Collection getPhoneCalls() {
+        //System.out.println(phoneCalls);
+        //System.out.println("\n\n\n");
+        Collections.sort(phoneCalls);
+        //System.out.println(phoneCalls);
         return phoneCalls;
     }
+
 }
