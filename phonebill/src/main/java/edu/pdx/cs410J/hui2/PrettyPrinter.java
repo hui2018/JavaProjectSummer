@@ -37,24 +37,20 @@ public class PrettyPrinter implements PhoneBillDumper {
      * This function is to get the duration between start time and end time
      * @param startTime The start time of the phone call
      * @param endTime the end time of the phone call
+     * @return it return the minutes or hour and minutes
      */
-    public void getDuration(Date startTime, Date endTime)
+    public String getDuration(Date startTime, Date endTime)
     {
         long duration;
-        //duration = startTime.getTime() - endTime.getTime();
         duration = endTime.getTime() -startTime.getTime();
         long minutes;
         minutes = duration / (60*1000)%60;
         long hour;
         hour = duration /(60*60*1000)%24;
-
-
         if(hour == 0)
-            System.out.println(minutes);
+            return ""+minutes;
         else
-            System.out.println(hour + ":" + minutes);
-
-
+            return ""+hour+":"+minutes;
     }
 
     /**
@@ -82,9 +78,8 @@ public class PrettyPrinter implements PhoneBillDumper {
 
             startTime = phoneCallsTest.get(i).getStartTime();
             endTime = phoneCallsTest.get(i).getEndTime();
-            System.out.print("     "+phoneCallsTest.get(i).getCaller() + "            " + phoneCallsTest.get(i).getCallee()
-                    + "         " + startDate + "         " + endDate + "             ");
-            getDuration(startTime, endTime);
+            System.out.println("     "+phoneCallsTest.get(i).getCaller() + "            " + phoneCallsTest.get(i).getCallee()
+                    + "         " + startDate + "         " + endDate + "             " + getDuration(startTime, endTime));
         }
         dumpToFile(bill);
     }
@@ -103,7 +98,6 @@ public class PrettyPrinter implements PhoneBillDumper {
         Date endTime;
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         BufferedWriter bw = null;
-        //FileWriter fw = null;
         ArrayList<PhoneCall> phoneCallsTest = (ArrayList<PhoneCall>) bill.getPhoneCalls();
         if(!fileLocation.exists())
             fileLocation.createNewFile();
@@ -121,7 +115,7 @@ public class PrettyPrinter implements PhoneBillDumper {
             startTime = phoneCallsTest.get(i).getStartTime();
             endTime = phoneCallsTest.get(i).getEndTime();
             bw.write("     "+phoneCallsTest.get(i).getCaller() + "            " + phoneCallsTest.get(i).getCallee()
-                    + "         " + startDate + "         " + endDate + "             ");
+                    + "         " + startDate + "         " + endDate + "             "+getDuration(startTime, endTime));
             bw.newLine();
         }
 

@@ -48,7 +48,7 @@ public class Project3 {
     checkEndTime((String) listOfArgs.get(6), (String) listOfArgs.get(7));
     checkTimeLabel(startTimeLabel, endTimeLabel);
 
-    formatter(startTime, endTime, startTimeLabel, endTimeLabel);
+    formatter(startTime, endTime);
 
     if(textParseDump)
     {
@@ -58,11 +58,6 @@ public class Project3 {
       if(parser.checkFile())
       {
         oldPhoneBill = parser.parse();
-
-
-        //Object[] test  = new String [10];
-        //test = oldPhoneBill.getPhoneCalls().toArray();
-        //System.out.println(test[0] +"\n" + test[3]);
       }
       //create empty PhoneBill new file with that command line
       else
@@ -81,13 +76,6 @@ public class Project3 {
     }
 
     PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));
-    //oldPhoneBill.getPhoneCalls();
-
-/*
-    ArrayList<PhoneCall> phoneCallsTest = (ArrayList<PhoneCall>) oldPhoneBill.getPhoneCalls();
-    PrettyPrinter pretty = new PrettyPrinter(customerName, callerNumber, calleeNumber, startTime, endTime);
-    pretty.dump(phoneCallsTest);
-*/
     if(prettyPrint) {
       PrettyPrinter pretty = new PrettyPrinter(fileNamePretty);
       try {
@@ -103,6 +91,11 @@ public class Project3 {
     System.exit(1);
   }
 
+  /**
+   * THis is to check that the time label can only be am or pm
+   * @param startLabel  Start time's am or pm
+   * @param endLabel  end time's am or pm
+   */
     public static void checkTimeLabel(String startLabel, String endLabel)
     {
       if(!startLabel.contains("am"))
@@ -132,7 +125,7 @@ public class Project3 {
      * @param startTime String that contains the start date and time
      * @param endTime String that contains the end date and time
      */
-    public static void formatter(String startTime, String endTime, String startLabel, String endLabel){
+    public static void formatter(String startTime, String endTime){
         SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         try {
             Date start = startFormat.parse(startTime);
