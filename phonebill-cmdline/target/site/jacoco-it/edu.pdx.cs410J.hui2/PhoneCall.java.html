@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PhoneCall.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS410J Phone Bill Project</a> &gt; <a href="index.source.html" class="el_package">edu.pdx.cs410J.hui2</a> &gt; <span class="el_source">PhoneCall.java</span></div><h1>PhoneCall.java</h1><pre class="source lang-java linenums">package edu.pdx.cs410J.hui2;
+
+import edu.pdx.cs410J.AbstractPhoneCall;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+public class PhoneCall extends AbstractPhoneCall implements Comparable&lt;PhoneCall&gt; {
+  private String callerNumber;
+  private String calleeNumber;
+  private String startTime;
+  private String endTime;
+  public Date dateStartTime;
+  public Date dateEndTime;
+    /**
+     * Constructor that takes in the phone number and time of the phone call
+     * @param callerNumber  The phone number of the caller
+     * @param calleeNumber  The phone number of the callee
+     * @param startTime     The start date and time of the call
+     * @param endTime       The end date and time of the call
+     */
+  PhoneCall(String callerNumber, String calleeNumber, String startTime, String endTime)
+<span class="nc" id="L25">  {</span>
+<span class="nc" id="L26">    this.callerNumber = callerNumber;</span>
+<span class="nc" id="L27">    this.calleeNumber = calleeNumber;</span>
+<span class="nc" id="L28">    this.startTime = startTime;</span>
+<span class="nc" id="L29">    this.endTime = endTime;</span>
+<span class="nc" id="L30">    formatter(startTime, endTime);</span>
+<span class="nc" id="L31">  }</span>
+  PhoneCall()
+<span class="nc" id="L33">  {}</span>
+    /**
+     *
+     * @return it returns the caller's phone number
+     */
+  @Override
+  public String getCaller() {
+<span class="nc" id="L40">    return callerNumber;</span>
+  }
+
+    /**
+     *
+     * @return it returns the callee's phone number
+     */
+  @Override
+  public String getCallee() {
+<span class="nc" id="L49">    return calleeNumber;</span>
+  }
+
+    /**
+     *
+     * @return It returns the start date and time
+     */
+  @Override
+  public String getStartTimeString() {
+<span class="nc" id="L58">    return startTime;</span>
+  }
+
+    /**
+     *
+     * @return It returns the end date and time
+     */
+  @Override
+  public String getEndTimeString() {
+<span class="nc" id="L67">    return endTime;</span>
+  }
+  @Override
+  public Date getStartTime()
+  {
+<span class="nc" id="L72">    return dateStartTime;</span>
+  }
+  @Override
+  public Date getEndTime()
+  {
+<span class="nc" id="L77">    return dateEndTime;</span>
+  }
+
+  public Date formatter(String startTime, String endTime){
+<span class="nc" id="L81">    SimpleDateFormat startFormat = new SimpleDateFormat(&quot;MM/dd/yyyy hh:mm aa&quot;);</span>
+    try {
+<span class="nc" id="L83">      dateStartTime = startFormat.parse(startTime);</span>
+<span class="nc" id="L84">      dateEndTime = startFormat.parse(endTime);</span>
+<span class="nc" id="L85">    } catch (ParseException e) {</span>
+<span class="nc" id="L86">      e.printStackTrace();</span>
+<span class="nc" id="L87">      System.exit(1);</span>
+<span class="nc" id="L88">    }</span>
+<span class="nc" id="L89">    return null;</span>
+  }
+
+  @Override
+  public int compareTo(PhoneCall o) {
+<span class="nc" id="L94">    int startCompare = this.getStartTime().compareTo(o.getStartTime());</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">    if(startCompare != 0)</span>
+<span class="nc" id="L96">      return startCompare;</span>
+<span class="nc" id="L97">    int phoneCallerCompare = this.getCaller().compareTo(o.getCaller());</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">    if(phoneCallerCompare != 0)</span>
+<span class="nc" id="L99">      return phoneCallerCompare;</span>
+<span class="nc" id="L100">    return 0;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

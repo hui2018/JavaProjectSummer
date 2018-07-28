@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package edu.pdx.cs410J.hui2;</a>
+<span class="sourceLineNo">002</span><a id="line.2">import java.io.IOException;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.Arrays;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.util.List;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.util.ArrayList;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import edu.pdx.cs410J.AbstractPhoneBill;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.util.Stack;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.util.Date;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.text.SimpleDateFormat;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.text.ParseException;</a>
+<span class="sourceLineNo">011</span><a id="line.11"></a>
+<span class="sourceLineNo">012</span><a id="line.12">import java.util.Collection;</a>
+<span class="sourceLineNo">013</span><a id="line.13"></a>
+<span class="sourceLineNo">014</span><a id="line.14">/**</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * Created by Hui Yu Sim</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * Project 1</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * The main class for the CS410J Phone Bill Project</a>
+<span class="sourceLineNo">018</span><a id="line.18"> */</a>
+<span class="sourceLineNo">019</span><a id="line.19">public class Project2 {</a>
+<span class="sourceLineNo">020</span><a id="line.20">  private static boolean printOpt = false;  // We are to check if we need to print out the information at the end</a>
+<span class="sourceLineNo">021</span><a id="line.21">  private static boolean textParseDump = false; //checking if textfile is in commandline</a>
+<span class="sourceLineNo">022</span><a id="line.22">  public static String fileName; //Store the file name</a>
+<span class="sourceLineNo">023</span><a id="line.23">  public static AbstractPhoneBill oldPhoneBill;</a>
+<span class="sourceLineNo">024</span><a id="line.24">  public static void main(String[] args) {</a>
+<span class="sourceLineNo">025</span><a id="line.25">    checkReadMe(args);  //check readMe first</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">    ArrayList listOfArgs = new ArrayList&lt;String&gt;(Arrays.asList(args));</a>
+<span class="sourceLineNo">028</span><a id="line.28">    listOfArgs = removeOption(listOfArgs); // remove all options from the argument</a>
+<span class="sourceLineNo">029</span><a id="line.29">    checkArgs(listOfArgs); // check the number of arguments</a>
+<span class="sourceLineNo">030</span><a id="line.30">    String customerName = (String) listOfArgs.get(0);</a>
+<span class="sourceLineNo">031</span><a id="line.31">    String callerNumber = (String) listOfArgs.get(1);</a>
+<span class="sourceLineNo">032</span><a id="line.32">    String calleeNumber = (String) listOfArgs.get(2);</a>
+<span class="sourceLineNo">033</span><a id="line.33">    String startTime = (String) listOfArgs.get(3) + " " + (String) listOfArgs.get(4);</a>
+<span class="sourceLineNo">034</span><a id="line.34">    String endTime = (String) listOfArgs.get(5) + " " + (String) listOfArgs.get(6);</a>
+<span class="sourceLineNo">035</span><a id="line.35"></a>
+<span class="sourceLineNo">036</span><a id="line.36">    checkName(customerName);</a>
+<span class="sourceLineNo">037</span><a id="line.37">    checkCallerPhone(callerNumber);</a>
+<span class="sourceLineNo">038</span><a id="line.38">    checkCalleePhone(calleeNumber);</a>
+<span class="sourceLineNo">039</span><a id="line.39">    checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));</a>
+<span class="sourceLineNo">040</span><a id="line.40">    checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));</a>
+<span class="sourceLineNo">041</span><a id="line.41">    formatter(startTime, endTime);</a>
+<span class="sourceLineNo">042</span><a id="line.42"></a>
+<span class="sourceLineNo">043</span><a id="line.43">    if(textParseDump)</a>
+<span class="sourceLineNo">044</span><a id="line.44">    {</a>
+<span class="sourceLineNo">045</span><a id="line.45">      TextParser parser = new TextParser();</a>
+<span class="sourceLineNo">046</span><a id="line.46">      parser.getFile(fileName, (String) listOfArgs.get(0));</a>
+<span class="sourceLineNo">047</span><a id="line.47">      //check if file exist of not</a>
+<span class="sourceLineNo">048</span><a id="line.48">      if(parser.checkFile())</a>
+<span class="sourceLineNo">049</span><a id="line.49">      {</a>
+<span class="sourceLineNo">050</span><a id="line.50">        oldPhoneBill = parser.parse();</a>
+<span class="sourceLineNo">051</span><a id="line.51">      }</a>
+<span class="sourceLineNo">052</span><a id="line.52">      //create empty PhoneBill new file with that command line</a>
+<span class="sourceLineNo">053</span><a id="line.53">      else</a>
+<span class="sourceLineNo">054</span><a id="line.54">      {</a>
+<span class="sourceLineNo">055</span><a id="line.55">        System.out.println("File does not exist, creating new file");</a>
+<span class="sourceLineNo">056</span><a id="line.56">        parser.createFile(fileName);</a>
+<span class="sourceLineNo">057</span><a id="line.57">      }</a>
+<span class="sourceLineNo">058</span><a id="line.58">      TextDumper dumper = new TextDumper(customerName, callerNumber, calleeNumber, startTime, endTime);</a>
+<span class="sourceLineNo">059</span><a id="line.59">      dumper.getFile(fileName);</a>
+<span class="sourceLineNo">060</span><a id="line.60">      try {</a>
+<span class="sourceLineNo">061</span><a id="line.61">          dumper.dump(oldPhoneBill);</a>
+<span class="sourceLineNo">062</span><a id="line.62">          oldPhoneBill = dumper.returnPhoneBill();</a>
+<span class="sourceLineNo">063</span><a id="line.63">      } catch (IOException e) {</a>
+<span class="sourceLineNo">064</span><a id="line.64">            e.printStackTrace();</a>
+<span class="sourceLineNo">065</span><a id="line.65">        }</a>
+<span class="sourceLineNo">066</span><a id="line.66">    }</a>
+<span class="sourceLineNo">067</span><a id="line.67"></a>
+<span class="sourceLineNo">068</span><a id="line.68">    PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));</a>
+<span class="sourceLineNo">069</span><a id="line.69">    if(printOpt)   //this will be at the very end</a>
+<span class="sourceLineNo">070</span><a id="line.70">      printInfo(bill);</a>
+<span class="sourceLineNo">071</span><a id="line.71">    System.exit(1);</a>
+<span class="sourceLineNo">072</span><a id="line.72">  }</a>
+<span class="sourceLineNo">073</span><a id="line.73"></a>
+<span class="sourceLineNo">074</span><a id="line.74">    /**</a>
+<span class="sourceLineNo">075</span><a id="line.75">     * this function is to format the date so that we can use it to compare the values between start and end time</a>
+<span class="sourceLineNo">076</span><a id="line.76">     * @param startTime String that contains the start date and time</a>
+<span class="sourceLineNo">077</span><a id="line.77">     * @param endTime String that contains the end date and time</a>
+<span class="sourceLineNo">078</span><a id="line.78">     */</a>
+<span class="sourceLineNo">079</span><a id="line.79">    public static void formatter(String startTime, String endTime){</a>
+<span class="sourceLineNo">080</span><a id="line.80">        SimpleDateFormat startFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");</a>
+<span class="sourceLineNo">081</span><a id="line.81">        try {</a>
+<span class="sourceLineNo">082</span><a id="line.82">            Date start = startFormat.parse(startTime);</a>
+<span class="sourceLineNo">083</span><a id="line.83">            Date end = startFormat.parse(endTime);</a>
+<span class="sourceLineNo">084</span><a id="line.84">            if(start.compareTo(end) &gt; 0)</a>
+<span class="sourceLineNo">085</span><a id="line.85">            {</a>
+<span class="sourceLineNo">086</span><a id="line.86">                System.err.println("Start time is after end time, please modified the date/time");</a>
+<span class="sourceLineNo">087</span><a id="line.87">                System.exit(1);</a>
+<span class="sourceLineNo">088</span><a id="line.88">            }</a>
+<span class="sourceLineNo">089</span><a id="line.89">        } catch (ParseException e) {</a>
+<span class="sourceLineNo">090</span><a id="line.90">            e.printStackTrace();</a>
+<span class="sourceLineNo">091</span><a id="line.91">            System.exit(1);</a>
+<span class="sourceLineNo">092</span><a id="line.92">        }</a>
+<span class="sourceLineNo">093</span><a id="line.93">    }</a>
+<span class="sourceLineNo">094</span><a id="line.94"></a>
+<span class="sourceLineNo">095</span><a id="line.95">  /**</a>
+<span class="sourceLineNo">096</span><a id="line.96">   * Check that the customer name can only contain letters and no numbers or symbols.</a>
+<span class="sourceLineNo">097</span><a id="line.97">   * The name will also allow double quote and a space so that it can have a full name</a>
+<span class="sourceLineNo">098</span><a id="line.98">   * when entering the customer name.</a>
+<span class="sourceLineNo">099</span><a id="line.99">   * @param customerName  Name of the customer stored in a string</a>
+<span class="sourceLineNo">100</span><a id="line.100">   */</a>
+<span class="sourceLineNo">101</span><a id="line.101">  private static void checkName(String customerName)</a>
+<span class="sourceLineNo">102</span><a id="line.102">  {</a>
+<span class="sourceLineNo">103</span><a id="line.103">    if(!customerName.matches("[a-z A-Z]+"))</a>
+<span class="sourceLineNo">104</span><a id="line.104">    {</a>
+<span class="sourceLineNo">105</span><a id="line.105">      System.err.println("Invalid customer name");</a>
+<span class="sourceLineNo">106</span><a id="line.106">      System.exit(1);</a>
+<span class="sourceLineNo">107</span><a id="line.107">    }</a>
+<span class="sourceLineNo">108</span><a id="line.108">  }</a>
+<span class="sourceLineNo">109</span><a id="line.109"></a>
+<span class="sourceLineNo">110</span><a id="line.110">  /**</a>
+<span class="sourceLineNo">111</span><a id="line.111">   * We want to check if the phone number of caller is in the correct format</a>
+<span class="sourceLineNo">112</span><a id="line.112">   * if the format is incorrect then we just want to tell the user that</a>
+<span class="sourceLineNo">113</span><a id="line.113">   * the callee phone number is invalid.</a>
+<span class="sourceLineNo">114</span><a id="line.114">   * @param phoneNumber caller's phone number that is stored in a string and needs to be</a>
+<span class="sourceLineNo">115</span><a id="line.115">   *                    in a format of nnn-nnn-nnnn</a>
+<span class="sourceLineNo">116</span><a id="line.116">   */</a>
+<span class="sourceLineNo">117</span><a id="line.117">  private static void checkCallerPhone(String phoneNumber)</a>
+<span class="sourceLineNo">118</span><a id="line.118">    {</a>
+<span class="sourceLineNo">119</span><a id="line.119">      if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))</a>
+<span class="sourceLineNo">120</span><a id="line.120">      {</a>
+<span class="sourceLineNo">121</span><a id="line.121">        System.err.println("Invalid caller phone number");</a>
+<span class="sourceLineNo">122</span><a id="line.122">        System.exit(1);</a>
+<span class="sourceLineNo">123</span><a id="line.123">      }</a>
+<span class="sourceLineNo">124</span><a id="line.124">    }</a>
+<span class="sourceLineNo">125</span><a id="line.125"></a>
+<span class="sourceLineNo">126</span><a id="line.126">  /**</a>
+<span class="sourceLineNo">127</span><a id="line.127">   * We want to check if the phone number of callee is in the correct format</a>
+<span class="sourceLineNo">128</span><a id="line.128">   * if the format is incorrect then we just want to tell the user that</a>
+<span class="sourceLineNo">129</span><a id="line.129">   * the callee phone number is invalid.</a>
+<span class="sourceLineNo">130</span><a id="line.130">   * @param phoneNumber callee's phone number that is stored in a string and needs to be</a>
+<span class="sourceLineNo">131</span><a id="line.131">   *                    in a format of nnn-nnn-nnnn</a>
+<span class="sourceLineNo">132</span><a id="line.132">   */</a>
+<span class="sourceLineNo">133</span><a id="line.133">  private static void checkCalleePhone(String phoneNumber)</a>
+<span class="sourceLineNo">134</span><a id="line.134">    {</a>
+<span class="sourceLineNo">135</span><a id="line.135">      if(!phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}$"))</a>
+<span class="sourceLineNo">136</span><a id="line.136">      {</a>
+<span class="sourceLineNo">137</span><a id="line.137">        System.err.println("Invalid callee phone number");</a>
+<span class="sourceLineNo">138</span><a id="line.138">        System.exit(1);</a>
+<span class="sourceLineNo">139</span><a id="line.139">      }</a>
+<span class="sourceLineNo">140</span><a id="line.140">    }</a>
+<span class="sourceLineNo">141</span><a id="line.141"></a>
+<span class="sourceLineNo">142</span><a id="line.142">  /**</a>
+<span class="sourceLineNo">143</span><a id="line.143">   * In this function we are checking if the start date and start time is in the format that we want.</a>
+<span class="sourceLineNo">144</span><a id="line.144">   * If the format is not what we want then we want to tell the user what the problem is</a>
+<span class="sourceLineNo">145</span><a id="line.145">   * then exit out of the program.</a>
+<span class="sourceLineNo">146</span><a id="line.146">   * @param startDate start date that is stored in a string in the format of nn/nn/nnnn</a>
+<span class="sourceLineNo">147</span><a id="line.147">   * @param startTime start time that is stored in a string in the format of nn:nn</a>
+<span class="sourceLineNo">148</span><a id="line.148">   * Where the "n" are integers.</a>
+<span class="sourceLineNo">149</span><a id="line.149">   */</a>
+<span class="sourceLineNo">150</span><a id="line.150">    private static void checkStartTime(String startDate, String startTime)</a>
+<span class="sourceLineNo">151</span><a id="line.151">    {</a>
+<span class="sourceLineNo">152</span><a id="line.152">      if(!startDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})"))</a>
+<span class="sourceLineNo">153</span><a id="line.153">      {</a>
+<span class="sourceLineNo">154</span><a id="line.154">        System.err.println("Invalid start date");</a>
+<span class="sourceLineNo">155</span><a id="line.155">        System.exit(1);</a>
+<span class="sourceLineNo">156</span><a id="line.156">      }</a>
+<span class="sourceLineNo">157</span><a id="line.157">      else if(!startTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))</a>
+<span class="sourceLineNo">158</span><a id="line.158">      {</a>
+<span class="sourceLineNo">159</span><a id="line.159">        System.err.println("Invalid start time");</a>
+<span class="sourceLineNo">160</span><a id="line.160">        System.exit(1);</a>
+<span class="sourceLineNo">161</span><a id="line.161">      }</a>
+<span class="sourceLineNo">162</span><a id="line.162">    }</a>
+<span class="sourceLineNo">163</span><a id="line.163"></a>
+<span class="sourceLineNo">164</span><a id="line.164">  /**</a>
+<span class="sourceLineNo">165</span><a id="line.165">   * In this function we are checking if the end date and end time is in the format that we want.</a>
+<span class="sourceLineNo">166</span><a id="line.166">   * If the format is not what we want then we want to tell the user what the problem is</a>
+<span class="sourceLineNo">167</span><a id="line.167">   * then exit out of the program.</a>
+<span class="sourceLineNo">168</span><a id="line.168">   * @param endDate end date that is stored in a string in the format of nn/nn/nnnn</a>
+<span class="sourceLineNo">169</span><a id="line.169">   * @param endTime end time that is stored in a string in the format of nn:nn</a>
+<span class="sourceLineNo">170</span><a id="line.170">   * Where the "n" are integers.</a>
+<span class="sourceLineNo">171</span><a id="line.171">   */</a>
+<span class="sourceLineNo">172</span><a id="line.172">    private static void checkEndTime(String endDate, String endTime)</a>
+<span class="sourceLineNo">173</span><a id="line.173">    {</a>
+<span class="sourceLineNo">174</span><a id="line.174">      if(!endDate.matches("((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/(19|20)([0-9]{2})"))</a>
+<span class="sourceLineNo">175</span><a id="line.175">      {</a>
+<span class="sourceLineNo">176</span><a id="line.176">        System.err.println("Invalid end date");</a>
+<span class="sourceLineNo">177</span><a id="line.177">        System.exit(1);</a>
+<span class="sourceLineNo">178</span><a id="line.178">      }</a>
+<span class="sourceLineNo">179</span><a id="line.179">      else if(!endTime.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))</a>
+<span class="sourceLineNo">180</span><a id="line.180">      {</a>
+<span class="sourceLineNo">181</span><a id="line.181">        System.err.println("Invalid end time");</a>
+<span class="sourceLineNo">182</span><a id="line.182">        System.exit(1);</a>
+<span class="sourceLineNo">183</span><a id="line.183">      }</a>
+<span class="sourceLineNo">184</span><a id="line.184">    }</a>
+<span class="sourceLineNo">185</span><a id="line.185"></a>
+<span class="sourceLineNo">186</span><a id="line.186">  /**</a>
+<span class="sourceLineNo">187</span><a id="line.187">   * Here we are removing the option arguments because they can appear anywhere on the command line,</a>
+<span class="sourceLineNo">188</span><a id="line.188">   * so it will be easier for us to get the right arguments. We want to then turn the print option on</a>
+<span class="sourceLineNo">189</span><a id="line.189">   * with a boolean so that it will just run the print function if -print is found on the command line</a>
+<span class="sourceLineNo">190</span><a id="line.190">   * @param arrayList All of the array of arguments from the command line</a>
+<span class="sourceLineNo">191</span><a id="line.191">   * @return It will return the array list without the -print command</a>
+<span class="sourceLineNo">192</span><a id="line.192">   */</a>
+<span class="sourceLineNo">193</span><a id="line.193">  public static ArrayList removeOption(ArrayList arrayList)</a>
+<span class="sourceLineNo">194</span><a id="line.194">  {</a>
+<span class="sourceLineNo">195</span><a id="line.195">    if(arrayList.contains("-print"))</a>
+<span class="sourceLineNo">196</span><a id="line.196">    {</a>
+<span class="sourceLineNo">197</span><a id="line.197">      arrayList.remove(arrayList.indexOf("-print"));</a>
+<span class="sourceLineNo">198</span><a id="line.198">      printOpt = true;</a>
+<span class="sourceLineNo">199</span><a id="line.199">    }</a>
+<span class="sourceLineNo">200</span><a id="line.200">    if(arrayList.contains("-textFile"))</a>
+<span class="sourceLineNo">201</span><a id="line.201">    {</a>
+<span class="sourceLineNo">202</span><a id="line.202">      arrayList.remove(arrayList.indexOf("-textFile"));</a>
+<span class="sourceLineNo">203</span><a id="line.203">      fileName = (String) arrayList.get(0);</a>
+<span class="sourceLineNo">204</span><a id="line.204">      arrayList.remove(arrayList.get(0));</a>
+<span class="sourceLineNo">205</span><a id="line.205">      textParseDump = true;</a>
+<span class="sourceLineNo">206</span><a id="line.206">    }</a>
+<span class="sourceLineNo">207</span><a id="line.207">    return arrayList;</a>
+<span class="sourceLineNo">208</span><a id="line.208">  }</a>
+<span class="sourceLineNo">209</span><a id="line.209"></a>
+<span class="sourceLineNo">210</span><a id="line.210">  /**</a>
+<span class="sourceLineNo">211</span><a id="line.211">   * we are checking all of the arguments conditions that are possible</a>
+<span class="sourceLineNo">212</span><a id="line.212">   * The first condition is to check if the argument size is 0</a>
+<span class="sourceLineNo">213</span><a id="line.213">   * The second condition is to check if the argument size is greater than 7 the reason is because</a>
+<span class="sourceLineNo">214</span><a id="line.214">   * start time and end time consists of two arguments each so that the total argument is 7</a>
+<span class="sourceLineNo">215</span><a id="line.215">   * The last condition is to make sure that there is a total of 7 arguments.</a>
+<span class="sourceLineNo">216</span><a id="line.216">   * @param numArgs array list without the print option</a>
+<span class="sourceLineNo">217</span><a id="line.217">   */</a>
+<span class="sourceLineNo">218</span><a id="line.218">  public static void checkArgs(ArrayList numArgs)</a>
+<span class="sourceLineNo">219</span><a id="line.219">  {</a>
+<span class="sourceLineNo">220</span><a id="line.220">    if(numArgs.size() == 0) {</a>
+<span class="sourceLineNo">221</span><a id="line.221">      System.err.println("Missing command line arguments");</a>
+<span class="sourceLineNo">222</span><a id="line.222">      System.exit(1);</a>
+<span class="sourceLineNo">223</span><a id="line.223">    }</a>
+<span class="sourceLineNo">224</span><a id="line.224">    else if(numArgs.size() &gt; 7) {</a>
+<span class="sourceLineNo">225</span><a id="line.225">      System.err.println("Too many arguments");</a>
+<span class="sourceLineNo">226</span><a id="line.226">      System.exit(1);</a>
+<span class="sourceLineNo">227</span><a id="line.227">    }</a>
+<span class="sourceLineNo">228</span><a id="line.228">    else if(numArgs.size() != 7)</a>
+<span class="sourceLineNo">229</span><a id="line.229">    {</a>
+<span class="sourceLineNo">230</span><a id="line.230">      System.err.println("Not enough arguments");</a>
+<span class="sourceLineNo">231</span><a id="line.231">      System.exit(1);</a>
+<span class="sourceLineNo">232</span><a id="line.232">    }</a>
+<span class="sourceLineNo">233</span><a id="line.233"></a>
+<span class="sourceLineNo">234</span><a id="line.234">  }</a>
+<span class="sourceLineNo">235</span><a id="line.235">  /**</a>
+<span class="sourceLineNo">236</span><a id="line.236">   * We will print out the information if the -print option is set in the command line</a>
+<span class="sourceLineNo">237</span><a id="line.237">   * @param customer object that contains the customer information</a>
+<span class="sourceLineNo">238</span><a id="line.238">   */</a>
+<span class="sourceLineNo">239</span><a id="line.239">  public static void printInfo(PhoneBill customer)</a>
+<span class="sourceLineNo">240</span><a id="line.240">  {</a>
+<span class="sourceLineNo">241</span><a id="line.241">      System.out.println("Custom: " + customer.getCustomer() + "\n" + customer.getPhoneCalls());</a>
+<span class="sourceLineNo">242</span><a id="line.242">  }</a>
+<span class="sourceLineNo">243</span><a id="line.243"></a>
+<span class="sourceLineNo">244</span><a id="line.244">  /**</a>
+<span class="sourceLineNo">245</span><a id="line.245">   * This function is to check if any of the arguments on the command line contains -README</a>
+<span class="sourceLineNo">246</span><a id="line.246">   * and if it does, then we want to just run the readMe function and exit out of the program</a>
+<span class="sourceLineNo">247</span><a id="line.247">   * @param args list of arguments from the command line</a>
+<span class="sourceLineNo">248</span><a id="line.248">   */</a>
+<span class="sourceLineNo">249</span><a id="line.249">  public static void checkReadMe(String[]args)</a>
+<span class="sourceLineNo">250</span><a id="line.250">  {</a>
+<span class="sourceLineNo">251</span><a id="line.251">    for(int i = 0; i&lt;args.length; ++i)</a>
+<span class="sourceLineNo">252</span><a id="line.252">    {</a>
+<span class="sourceLineNo">253</span><a id="line.253">      if (args[i].equals("-README"))</a>
+<span class="sourceLineNo">254</span><a id="line.254">      {</a>
+<span class="sourceLineNo">255</span><a id="line.255">        readMe();</a>
+<span class="sourceLineNo">256</span><a id="line.256">        System.exit(1);</a>
+<span class="sourceLineNo">257</span><a id="line.257">      }</a>
+<span class="sourceLineNo">258</span><a id="line.258">    }</a>
+<span class="sourceLineNo">259</span><a id="line.259">  }</a>
+<span class="sourceLineNo">260</span><a id="line.260"></a>
+<span class="sourceLineNo">261</span><a id="line.261">  /**</a>
+<span class="sourceLineNo">262</span><a id="line.262">   * This function will print out the project information and what is required of the user in order to get th</a>
+<span class="sourceLineNo">263</span><a id="line.263">   * program to run successfully.</a>
+<span class="sourceLineNo">264</span><a id="line.264">   */</a>
+<span class="sourceLineNo">265</span><a id="line.265">  static public void readMe()</a>
+<span class="sourceLineNo">266</span><a id="line.266">  {</a>
+<span class="sourceLineNo">267</span><a id="line.267">    System.out.println("Name: Hui Yu Sim \nProject: 1 Designing a Phone Bill Application\n\n" +</a>
+<span class="sourceLineNo">268</span><a id="line.268">            "The Purpose of this programming assignment is to create a phone bill that\n" +</a>
+<span class="sourceLineNo">269</span><a id="line.269">            "has customer name and consists of multiple phone calls.\n" +</a>
+<span class="sourceLineNo">270</span><a id="line.270">            "The program will take in arguments from the command line and check if the arguments are correct.\n" +</a>
+<span class="sourceLineNo">271</span><a id="line.271">            "Please follow the following steps to insure program will run correctly.\n");</a>
+<span class="sourceLineNo">272</span><a id="line.272">    System.out.println("usage: java edu.pdx.cs410J.&lt;login-id&gt;.Project2 [options] &lt;args&gt;\n" +</a>
+<span class="sourceLineNo">273</span><a id="line.273">            "args are (in this order):\n" +</a>
+<span class="sourceLineNo">274</span><a id="line.274">              "\tcustomer           Person whose phone bill we’re modeling\n" +</a>
+<span class="sourceLineNo">275</span><a id="line.275">              "\tcallerNumber       Phone number of caller\n" +</a>
+<span class="sourceLineNo">276</span><a id="line.276">              "\tcalleeNumber       Phone number of person who was called\n" +</a>
+<span class="sourceLineNo">277</span><a id="line.277">              "\tstartTime          Date and time call began (24-hour time)\n" +</a>
+<span class="sourceLineNo">278</span><a id="line.278">              "\tendTime            Date and time call ended (24-hour time)\n" +</a>
+<span class="sourceLineNo">279</span><a id="line.279">            "options are (options may appear in any order):\n" +</a>
+<span class="sourceLineNo">280</span><a id="line.280">              "\t-textFile file     Where to read/write the phone bill\n" +</a>
+<span class="sourceLineNo">281</span><a id="line.281">              "\t-print             Prints a description of the new phone call\n" +</a>
+<span class="sourceLineNo">282</span><a id="line.282">              "\t-README            Prints a README for this project and exits\n" +</a>
+<span class="sourceLineNo">283</span><a id="line.283">            "Date and time should be in the format: mm/dd/yyyy hh:mm");</a>
+<span class="sourceLineNo">284</span><a id="line.284">  }</a>
+<span class="sourceLineNo">285</span><a id="line.285">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

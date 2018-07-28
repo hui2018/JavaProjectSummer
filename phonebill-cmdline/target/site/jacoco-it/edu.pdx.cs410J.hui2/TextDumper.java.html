@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TextDumper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS410J Phone Bill Project</a> &gt; <a href="index.source.html" class="el_package">edu.pdx.cs410J.hui2</a> &gt; <span class="el_source">TextDumper.java</span></div><h1>TextDumper.java</h1><pre class="source lang-java linenums">package edu.pdx.cs410J.hui2;
+
+import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.AbstractPhoneCall;
+import edu.pdx.cs410J.PhoneBillDumper;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/**
+ * The class that will implement the fucntions of writing the command line arguments to the text file
+ */
+public class TextDumper implements PhoneBillDumper {
+    String fileName;
+    String customerName;
+    String callerNumber;
+    String calleeNumber;
+    String startTime;
+    String endTime;
+    AbstractPhoneCall newPhoneCall;
+    AbstractPhoneBill totalPhoneBill;
+
+    /**
+     * This function is to write the information form the command line into the text file. It will also
+     * check if the object is null, if it is then we want to create a new object of phonebill and store
+     * the information.
+     * @param bill the phonebill that pass in from the command line
+     * @throws IOException it will throw an exception if the file location doesn't exit to create the file name
+     */
+    @Override
+    public void dump(AbstractPhoneBill bill) throws IOException
+    {
+<span class="nc" id="L34">        AbstractPhoneBill phonebill = null;</span>
+<span class="nc" id="L35">        BufferedWriter bw = null;</span>
+<span class="nc" id="L36">        FileWriter fw = null;</span>
+<span class="nc" id="L37">        bw = new BufferedWriter(new FileWriter(fileName, true));</span>
+<span class="nc" id="L38">        bw.write(customerName + &quot;,&quot; + callerNumber + &quot;,&quot; + calleeNumber + &quot;,&quot; + startTime + &quot;,&quot; + endTime);</span>
+<span class="nc" id="L39">        bw.newLine();</span>
+<span class="nc" id="L40">        bw.flush();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(bw!=null)</span>
+<span class="nc" id="L42">            bw.close();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if(bill == null) {</span>
+<span class="nc" id="L44">            phonebill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));</span>
+<span class="nc" id="L45">            bill = phonebill;</span>
+        }
+        else {
+<span class="nc" id="L48">            newPhoneCall = new PhoneCall(callerNumber, calleeNumber, startTime, endTime);</span>
+<span class="nc" id="L49">            bill.addPhoneCall(newPhoneCall);</span>
+        }
+<span class="nc" id="L51">        totalPhoneBill = bill;</span>
+
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * gets the file name
+     * @param fileName store the file name
+     */
+    public void getFile(String fileName)
+    {
+<span class="nc" id="L61">        this.fileName = fileName;</span>
+<span class="nc" id="L62">    }</span>
+
+    /**
+     * a constructor to take in the variables
+     * @param customer string contains customer name
+     * @param caller string contains the caller's phone number
+     * @param callee string contains the callee's phone number
+     * @param startTime string contains the start date and time
+     * @param endTime string contains the end date and time
+     */
+    TextDumper(String customer, String caller, String callee, String startTime, String endTime)
+<span class="nc" id="L73">    {</span>
+<span class="nc" id="L74">        this.customerName = customer;</span>
+<span class="nc" id="L75">        this.callerNumber = caller;</span>
+<span class="nc" id="L76">        this.calleeNumber = callee;</span>
+<span class="nc" id="L77">        this.startTime = startTime;</span>
+<span class="nc" id="L78">        this.endTime = endTime;</span>
+<span class="nc" id="L79">    }</span>
+
+    /**
+     *
+     * @return it returns the phonebill
+     */
+    public AbstractPhoneBill returnPhoneBill()
+    {
+<span class="nc" id="L87">        return totalPhoneBill;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

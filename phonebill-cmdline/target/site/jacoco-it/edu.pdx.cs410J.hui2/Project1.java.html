@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Project1.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS410J Phone Bill Project</a> &gt; <a href="index.source.html" class="el_package">edu.pdx.cs410J.hui2</a> &gt; <span class="el_source">Project1.java</span></div><h1>Project1.java</h1><pre class="source lang-java linenums">package edu.pdx.cs410J.hui2;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import edu.pdx.cs410J.AbstractPhoneBill;
+import java.util.Stack;
+
+import java.util.Collection;
+
+/**
+ * Created by Hui Yu Sim
+ * Project 1
+ * The main class for the CS410J Phone Bill Project
+ */
+<span class="nc" id="L15">public class Project1 {</span>
+<span class="nc" id="L16">  private static boolean printOpt = false;  // We are to check if we need to print out the information at the end</span>
+  public static void main(String[] args) {
+<span class="nc" id="L18">    checkReadMe(args);  //check readMe first</span>
+
+<span class="nc" id="L20">    ArrayList listOfArgs = new ArrayList&lt;String&gt;(Arrays.asList(args));</span>
+<span class="nc" id="L21">    listOfArgs = removeOption(listOfArgs); // remove all options from the argument</span>
+<span class="nc" id="L22">    checkArgs(listOfArgs); // check the number of arguments</span>
+
+<span class="nc" id="L24">    String customerName = (String) listOfArgs.get(0);</span>
+<span class="nc" id="L25">    String callerNumber = (String) listOfArgs.get(1);</span>
+<span class="nc" id="L26">    String calleeNumber = (String) listOfArgs.get(2);</span>
+<span class="nc" id="L27">    String startTime = (String) listOfArgs.get(3) + &quot; &quot; + (String) listOfArgs.get(4);</span>
+<span class="nc" id="L28">    String endTime = (String) listOfArgs.get(5) + &quot; &quot; + (String) listOfArgs.get(6);</span>
+
+<span class="nc" id="L30">    checkName(customerName);</span>
+<span class="nc" id="L31">    checkCallerPhone(callerNumber);</span>
+<span class="nc" id="L32">    checkCalleePhone(calleeNumber);</span>
+<span class="nc" id="L33">    checkStartTime((String) listOfArgs.get(3), (String) listOfArgs.get(4));</span>
+<span class="nc" id="L34">    checkEndTime((String) listOfArgs.get(5), (String) listOfArgs.get(6));</span>
+
+<span class="nc" id="L36">    PhoneBill bill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">    if(printOpt)   //this will be at the very end</span>
+<span class="nc" id="L39">      printInfo(bill);</span>
+<span class="nc" id="L40">    System.exit(1);</span>
+<span class="nc" id="L41">  }</span>
+
+  /**
+   * Check that the customer name can only contain letters and no numbers or symbols.
+   * The name will also allow double quote and a space so that it can have a full name
+   * when entering the customer name.
+   * @param customerName  Name of the customer stored in a string
+   */
+  private static void checkName(String customerName)
+  {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">    if(!customerName.matches(&quot;[a-z A-Z]+&quot;))</span>
+    {
+<span class="nc" id="L53">      System.err.println(&quot;Invalid customer name&quot;);</span>
+<span class="nc" id="L54">      System.exit(1);</span>
+    }
+<span class="nc" id="L56">  }</span>
+
+  /**
+   * We want to check if the phone number of caller is in the correct format
+   * if the format is incorrect then we just want to tell the user that
+   * the callee phone number is invalid.
+   * @param phoneNumber caller's phone number that is stored in a string and needs to be
+   *                    in a format of nnn-nnn-nnnn
+   */
+  private static void checkCallerPhone(String phoneNumber)
+    {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">      if(!phoneNumber.matches(&quot;\\d{3}-\\d{3}-\\d{4}$&quot;))</span>
+      {
+<span class="nc" id="L69">        System.err.println(&quot;Invalid caller phone number&quot;);</span>
+<span class="nc" id="L70">        System.exit(1);</span>
+      }
+<span class="nc" id="L72">    }</span>
+
+  /**
+   * We want to check if the phone number of callee is in the correct format
+   * if the format is incorrect then we just want to tell the user that
+   * the callee phone number is invalid.
+   * @param phoneNumber callee's phone number that is stored in a string and needs to be
+   *                    in a format of nnn-nnn-nnnn
+   */
+  private static void checkCalleePhone(String phoneNumber)
+    {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">      if(!phoneNumber.matches(&quot;\\d{3}-\\d{3}-\\d{4}$&quot;))</span>
+      {
+<span class="nc" id="L85">        System.err.println(&quot;Invalid callee phone number&quot;);</span>
+<span class="nc" id="L86">        System.exit(1);</span>
+      }
+<span class="nc" id="L88">    }</span>
+
+  /**
+   * In this function we are checking if the start date and start time is in the format that we want.
+   * If the format is not what we want then we want to tell the user what the problem is
+   * then exit out of the program.
+   * @param startDate start date that is stored in a string in the format of nn/nn/nnnn
+   * @param startTime start time that is stored in a string in the format of nn:nn
+   * Where the &quot;n&quot; are integers.
+   */
+    private static void checkStartTime(String startDate, String startTime)
+    {
+<span class="nc bnc" id="L100" title="All 2 branches missed.">      if(!startDate.matches(&quot;((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})&quot;))</span>
+      {
+<span class="nc" id="L102">        System.err.println(&quot;Invalid start date&quot;);</span>
+<span class="nc" id="L103">        System.exit(1);</span>
+      }
+<span class="nc bnc" id="L105" title="All 2 branches missed.">      else if(!startTime.matches(&quot;([01]?[0-9]|2[0-3]):[0-5][0-9]&quot;))</span>
+      {
+<span class="nc" id="L107">        System.err.println(&quot;Invalid start time&quot;);</span>
+<span class="nc" id="L108">        System.exit(1);</span>
+      }
+<span class="nc" id="L110">    }</span>
+
+  /**
+   * In this function we are checking if the end date and end time is in the format that we want.
+   * If the format is not what we want then we want to tell the user what the problem is
+   * then exit out of the program.
+   * @param endDate end date that is stored in a string in the format of nn/nn/nnnn
+   * @param endTime end time that is stored in a string in the format of nn:nn
+   * Where the &quot;n&quot; are integers.
+   */
+    private static void checkEndTime(String endDate, String endTime)
+    {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">      if(!endDate.matches(&quot;((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/(19|20)([0-9]{2})&quot;))</span>
+      {
+<span class="nc" id="L124">        System.err.println(&quot;Invalid end date&quot;);</span>
+<span class="nc" id="L125">        System.exit(1);</span>
+      }
+<span class="nc bnc" id="L127" title="All 2 branches missed.">      else if(!endTime.matches(&quot;([01]?[0-9]|2[0-3]):[0-5][0-9]&quot;))</span>
+      {
+<span class="nc" id="L129">        System.err.println(&quot;Invalid end time&quot;);</span>
+<span class="nc" id="L130">        System.exit(1);</span>
+      }
+<span class="nc" id="L132">    }</span>
+
+  /**
+   * Here we are removing the option arguments because they can appear anywhere on the command line,
+   * so it will be easier for us to get the right arguments. We want to then turn the print option on
+   * with a boolean so that it will just run the print function if -print is found on the command line
+   * @param arrayList All of the array of arguments from the command line
+   * @return It will return the array list without the -print command
+   */
+  public static ArrayList removeOption(ArrayList arrayList)
+  {
+<span class="nc bnc" id="L143" title="All 2 branches missed.">    if(arrayList.contains(&quot;-print&quot;))</span>
+    {
+<span class="nc" id="L145">      arrayList.remove(arrayList.indexOf(&quot;-print&quot;));</span>
+<span class="nc" id="L146">      printOpt = true;</span>
+    }
+<span class="nc" id="L148">    return arrayList;</span>
+  }
+
+  /**
+   * we are checking all of the arguments conditions that are possible
+   * The first condition is to check if the argument size is 0
+   * The second condition is to check if the argument size is greater than 7 the reason is because
+   * start time and end time consists of two arguments each so that the total argument is 7
+   * The last condition is to make sure that there is a total of 7 arguments.
+   * @param numArgs array list without the print option
+   */
+  public static void checkArgs(ArrayList numArgs)
+  {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">    if(numArgs.size() == 0) {</span>
+<span class="nc" id="L162">      System.err.println(&quot;Missing command line arguments&quot;);</span>
+<span class="nc" id="L163">      System.exit(1);</span>
+    }
+<span class="nc bnc" id="L165" title="All 2 branches missed.">    else if(numArgs.size() &gt; 7) {</span>
+<span class="nc" id="L166">      System.err.println(&quot;Too many arguments&quot;);</span>
+<span class="nc" id="L167">      System.exit(1);</span>
+    }
+<span class="nc bnc" id="L169" title="All 2 branches missed.">    else if(numArgs.size() != 7)</span>
+    {
+<span class="nc" id="L171">      System.err.println(&quot;Not enough arguments&quot;);</span>
+<span class="nc" id="L172">      System.exit(1);</span>
+    }
+
+<span class="nc" id="L175">  }</span>
+  /**
+   * We will print out the information if the -print option is set in the command line
+   * @param customer object that contains the customer information
+   */
+  public static void printInfo(PhoneBill customer)
+  {
+<span class="nc" id="L182">      System.out.println(&quot;Custom: &quot; + customer.getCustomer() + &quot;\n&quot; + customer.getPhoneCalls());</span>
+<span class="nc" id="L183">  }</span>
+
+  /**
+   * This function is to check if any of the arguments on the command line contains -README
+   * and if it does, then we want to just run the readMe function and exit out of the program
+   * @param args list of arguments from the command line
+   */
+  public static void checkReadMe(String[]args)
+  {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">    for(int i = 0; i&lt;args.length; ++i)</span>
+    {
+<span class="nc bnc" id="L194" title="All 2 branches missed.">      if (args[i].equals(&quot;-README&quot;))</span>
+      {
+<span class="nc" id="L196">        readMe();</span>
+<span class="nc" id="L197">        System.exit(1);</span>
+      }
+    }
+<span class="nc" id="L200">  }</span>
+
+  /**
+   * This function will print out the project information and what is required of the user in order to get th
+   * program to run successfully.
+   */
+  static public void readMe()
+  {
+<span class="nc" id="L208">    System.out.println(&quot;Name: Hui Yu Sim \nProject: 1 Designing a Phone Bill Application\n\n&quot; +</span>
+            &quot;The Purpose of this programming assignment is to create a phone bill that\n&quot; +
+            &quot;has customer name and consists of multiple phone calls.\n&quot; +
+            &quot;The program will take in arguments from the command line and check if the arguments are correct.\n&quot; +
+            &quot;Please follow the following steps to insure program will run correctly.\n&quot;);
+<span class="nc" id="L213">    System.out.println(&quot;usage: java edu.pdx.cs410J.&lt;login-id&gt;.Project1 [options] &lt;args&gt;\n&quot; +</span>
+            &quot;args are (in this order):\n&quot; +
+              &quot;\tcustomer           Person whose phone bill we’re modeling\n&quot; +
+              &quot;\tcallerNumber       Phone number of caller\n&quot; +
+              &quot;\tcalleeNumber       Phone number of person who was called\n&quot; +
+              &quot;\tstartTime          Date and time call began (24-hour time)\n&quot; +
+              &quot;\tendTime            Date and time call ended (24-hour time)\n&quot; +
+            &quot;options are (options may appear in any order):\n&quot; +
+              &quot;\t-print             Prints a description of the new phone call\n&quot; +
+              &quot;\t-README            Prints a README for this project and exits\n&quot; +
+            &quot;Date and time should be in the format: mm/dd/yyyy hh:mm&quot;);
+<span class="nc" id="L224">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

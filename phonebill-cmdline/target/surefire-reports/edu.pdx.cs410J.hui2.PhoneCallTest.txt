@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: edu.pdx.cs410J.hui2.PhoneCallTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.1 s <<< FAILURE! - in edu.pdx.cs410J.hui2.PhoneCallTest
+getStartTimeStringNeedsToBeImplemented(edu.pdx.cs410J.hui2.PhoneCallTest)  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: Expected exception: java.lang.UnsupportedOperationException
+

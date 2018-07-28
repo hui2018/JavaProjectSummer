@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TextParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CS410J Phone Bill Project</a> &gt; <a href="index.source.html" class="el_package">edu.pdx.cs410J.hui2</a> &gt; <span class="el_source">TextParser.java</span></div><h1>TextParser.java</h1><pre class="source lang-java linenums">package edu.pdx.cs410J.hui2;
+
+import edu.pdx.cs410J.AbstractPhoneBill;
+import edu.pdx.cs410J.ParserException;
+import edu.pdx.cs410J.PhoneBillParser;
+
+import java.io.*;
+
+import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * class that reads from the file
+ */
+<span class="nc" id="L18">public class TextParser implements PhoneBillParser {</span>
+
+<span class="nc" id="L20">    String fileName = null;</span>
+<span class="nc" id="L21">    File filePath = null;</span>
+<span class="nc" id="L22">    private String commandCustomerName = null;</span>
+    String [] list;
+    AbstractPhoneBill phoneBill;
+
+    /**
+     * We are reading the file name and return the object of phonebill. We are doing a lot of checking in here,
+     * such as the checking name, checking file, checking date, and checking phone. We are also storing line by line
+     * into the string of array and split it by a comma that is contain in the file. With that comma in the file its
+     * easier to split them and store them in the array list.
+     * @return It returns the object of phonebill after it finish reading the text file
+     */
+    @Override
+    public AbstractPhoneBill parse() {
+<span class="nc" id="L35">        phoneBill = null;</span>
+        try
+        {
+<span class="nc" id="L38">            FileReader fRead = new FileReader(fileName);</span>
+<span class="nc" id="L39">            BufferedReader bRead = new BufferedReader(fRead);</span>
+<span class="nc" id="L40">            String check = &quot;&quot;;</span>
+<span class="nc" id="L41">            String splitby = &quot;,&quot;;</span>
+<span class="nc" id="L42">            String customerName = &quot;&quot;;</span>
+
+<span class="nc" id="L44">            boolean firstCheck = true;</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            while((check = bRead.readLine()) != null) {</span>
+
+<span class="nc" id="L47">                list = check.split(splitby);</span>
+
+<span class="nc" id="L49">                String splitBySpace = &quot; &quot;;</span>
+
+                String startDate;
+                String startTime;
+                String startLabel;
+                String endDate;
+                String endTime;
+                String endLabel;
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if(list.length &lt; 4)</span>
+                {
+<span class="nc" id="L60">                    System.err.println(&quot;Bad information in text file&quot;);</span>
+<span class="nc" id="L61">                    System.exit(1);</span>
+                }
+<span class="nc" id="L63">                checkFileName(list[0]);</span>
+<span class="nc" id="L64">                checkName(list[0]);</span>
+
+<span class="nc" id="L66">                checkCallerPhone(list[1]);</span>
+<span class="nc" id="L67">                checkCalleePhone(list[2]);</span>
+
+                //Check start date and time
+<span class="nc" id="L70">                String[] startList = list[3].split(splitBySpace);</span>
+<span class="nc" id="L71">                startDate = startList[0];</span>
+<span class="nc" id="L72">                startTime = startList[1];</span>
+<span class="nc" id="L73">                startLabel = startList[2];</span>
+
+                //check end date and time
+<span class="nc" id="L76">                String[] endList = list[4].split(splitBySpace);</span>
+<span class="nc" id="L77">                endDate = endList[0];</span>
+<span class="nc" id="L78">                endTime = endList[1];</span>
+<span class="nc" id="L79">                endLabel = endList[2];</span>
+
+                //System.out.println(list[3]);
+<span class="nc" id="L82">                formatter(list[3], list[4]);</span>
+<span class="nc" id="L83">                checkStartTime(startDate, startTime);</span>
+<span class="nc" id="L84">                checkEndTime(endDate, endTime);</span>
+                //formatter(list[3], list[4]);
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                if (firstCheck) {</span>
+<span class="nc" id="L88">                    firstCheck = false;</span>
+<span class="nc" id="L89">                    phoneBill = new PhoneBill(list[0], new PhoneCall(list[1], list[2], list[3], list[4]));</span>
+                } else {
+<span class="nc" id="L91">                    phoneBill.addPhoneCall(new PhoneCall(list[1], list[2], list[3], list[4]));</span>
+                }
+<span class="nc" id="L93">            }</span>
+        }
+<span class="nc" id="L95">        catch (FileNotFoundException e) {</span>
+<span class="nc" id="L96">            System.out.println(&quot;File not found&quot;);</span>
+<span class="nc" id="L97">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L99">        catch (IOException e) {</span>
+<span class="nc" id="L100">            System.out.println(&quot;File path not found&quot;);</span>
+<span class="nc" id="L101">            e.printStackTrace();</span>
+<span class="nc" id="L102">        }</span>
+<span class="nc" id="L103">        return phoneBill;</span>
+    }
+
+    /**
+     * This function is to store the file name and customer name into this constructor so that we
+     * can check if file exist and if the customer name matches from command line and from the file
+     * @param fileName  string that stores the file name from the command line
+     * @param customerName string that stores the customer's name from the command line
+     */
+    public void getFile(String fileName, String customerName)
+    {
+<span class="nc" id="L114">        this.fileName = fileName;</span>
+<span class="nc" id="L115">        filePath = new File(fileName);</span>
+<span class="nc" id="L116">        this.commandCustomerName = customerName;</span>
+<span class="nc" id="L117">    }</span>
+
+    /**
+     * we want to check if the file path exist or not. if it exist we return true if not false
+     * so we can decide if we need to create a file for it or not.
+     * @return If file exist return true else return false
+     */
+    public boolean checkFile()
+    {
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        if(filePath.exists())</span>
+        {
+<span class="nc" id="L128">            return true;</span>
+        }
+<span class="nc" id="L130">        return false;</span>
+    }
+
+    /**
+     * We want to create a new file if the file path that the user entered doesn't exist. I am making it
+     * so that the path is already correct and I just create a new file namd with what was input in the first place
+     * @param fileName The file name/path that is entered in the command line
+     */
+    public void createFile(String fileName)
+    {
+<span class="nc" id="L140">        File file = new File(fileName);</span>
+        try {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            if(file.createNewFile())</span>
+            {
+<span class="nc" id="L144">                System.out.println(&quot;File successfully created&quot;);</span>
+            }
+<span class="nc" id="L146">        } catch (IOException e) {</span>
+<span class="nc" id="L147">            System.err.println(&quot;File can not be created due to incorrect path&quot;);</span>
+<span class="nc" id="L148">            e.printStackTrace();</span>
+<span class="nc" id="L149">            System.exit(1);</span>
+<span class="nc" id="L150">        }</span>
+<span class="nc" id="L151">    }</span>
+
+    /**
+     * check the file name and the name that is entered from the command line is the same,
+     * if its not the same we want to return an error
+     * @param fileCustomerName The file customer's name to check with the customer's name that is input from command line
+     */
+    public void checkFileName(String fileCustomerName)
+    {
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if(!fileCustomerName.equals(commandCustomerName))</span>
+        {
+<span class="nc" id="L162">            System.err.println(&quot;The customer name from file does not match with the input name&quot;);</span>
+<span class="nc" id="L163">            System.exit(1);</span>
+        }
+<span class="nc" id="L165">    }</span>
+
+    /**
+     * Check that the customer name can only contain letters and no numbers or symbols.
+     * The name will also allow double quote and a space so that it can have a full name
+     * when entering the customer name.
+     * @param customerName  Name of the customer stored in a string
+     */
+    private static void checkName(String customerName)
+    {
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        if(!customerName.matches(&quot;[a-z A-Z 0-9]+&quot;))</span>
+        {
+<span class="nc" id="L177">            System.err.println(&quot;Invalid customer name in the text file&quot;);</span>
+<span class="nc" id="L178">            System.exit(1);</span>
+        }
+<span class="nc" id="L180">    }</span>
+
+    /**
+     * We want to check if the phone number of caller is in the correct format
+     * if the format is incorrect then we just want to tell the user that
+     * the callee phone number is invalid.
+     * @param phoneNumber caller's phone number that is stored in a string and needs to be
+     *                    in a format of nnn-nnn-nnnn
+     */
+    private static void checkCallerPhone(String phoneNumber)
+    {
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if(!phoneNumber.matches(&quot;\\d{3}-\\d{3}-\\d{4}$&quot;))</span>
+        {
+<span class="nc" id="L193">            System.err.println(&quot;Invalid caller phone number in text file&quot;);</span>
+<span class="nc" id="L194">            System.exit(1);</span>
+        }
+<span class="nc" id="L196">    }</span>
+
+    /**
+     * We want to check if the phone number of callee is in the correct format
+     * if the format is incorrect then we just want to tell the user that
+     * the callee phone number is invalid.
+     * @param phoneNumber callee's phone number that is stored in a string and needs to be
+     *                    in a format of nnn-nnn-nnnn
+     */
+    private static void checkCalleePhone(String phoneNumber)
+    {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        if(!phoneNumber.matches(&quot;\\d{3}-\\d{3}-\\d{4}$&quot;))</span>
+        {
+<span class="nc" id="L209">            System.err.println(&quot;Invalid callee phone number in text file&quot;);</span>
+<span class="nc" id="L210">            System.exit(1);</span>
+        }
+<span class="nc" id="L212">    }</span>
+
+    /**
+     * In this function we are checking if the start date and start time is in the format that we want.
+     * If the format is not what we want then we want to tell the user what the problem is
+     * then exit out of the program.
+     * @param startDate start date that is stored in a string in the format of nn/nn/nnnn
+     * @param startTime start time that is stored in a string in the format of nn:nn
+     * Where the &quot;n&quot; are integers.
+     */
+    private static void checkStartTime(String startDate, String startTime)
+    {
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        if(!startDate.matches(&quot;((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/[0-9]{2}([0-9]{2})&quot;))</span>
+        {
+<span class="nc" id="L226">            System.err.println(&quot;Invalid start date in text file&quot;);</span>
+<span class="nc" id="L227">            System.exit(1);</span>
+        }
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        else if(!startTime.matches(&quot;([0]?[1-9]|1[0-2]):[0-5][0-9]&quot;))</span>
+        {
+<span class="nc" id="L231">            System.err.println(&quot;Invalid start time in text file&quot;);</span>
+<span class="nc" id="L232">            System.exit(1);</span>
+        }
+<span class="nc" id="L234">    }</span>
+
+    /**
+     * In this function we are checking if the end date and end time is in the format that we want.
+     * If the format is not what we want then we want to tell the user what the problem is
+     * then exit out of the program.
+     * @param endDate end date that is stored in a string in the format of nn/nn/nnnn
+     * @param endTime end time that is stored in a string in the format of nn:nn
+     * Where the &quot;n&quot; are integers.
+     */
+    private static void checkEndTime(String endDate, String endTime)
+    {
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        if(!endDate.matches(&quot;((0?[1-9])|(1?[012]))/(0?[1-9]|[12][0-9]|3[01])/(19|20)([0-9]{2})&quot;))</span>
+        {
+<span class="nc" id="L248">            System.err.println(&quot;Invalid end date in text file&quot;);</span>
+<span class="nc" id="L249">            System.exit(1);</span>
+        }
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        else if(!endTime.matches(&quot;([0]?[1-9]|1[0-2]):[0-5][0-9]&quot;))</span>
+        {
+<span class="nc" id="L253">            System.err.println(&quot;Invalid end time in text file&quot;);</span>
+<span class="nc" id="L254">            System.exit(1);</span>
+        }
+<span class="nc" id="L256">    }</span>
+    public static void formatter(String startTime, String endTime){
+<span class="nc" id="L258">        SimpleDateFormat startFormat = new SimpleDateFormat(&quot;MM/dd/yyyy hh:mm aa&quot;);</span>
+        try {
+<span class="nc" id="L260">            Date start = startFormat.parse(startTime);</span>
+<span class="nc" id="L261">            Date end = startFormat.parse(endTime);</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">            if(start.compareTo(end) &gt; 0)</span>
+            {
+<span class="nc" id="L264">                System.err.println(&quot;Start time is after end time in the text file, please modified the date/time&quot;);</span>
+<span class="nc" id="L265">                System.exit(1);</span>
+            }
+<span class="nc" id="L267">        } catch (ParseException e) {</span>
+<span class="nc" id="L268">            e.printStackTrace();</span>
+<span class="nc" id="L269">            System.exit(1);</span>
+<span class="nc" id="L270">        }</span>
+<span class="nc" id="L271">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package edu.pdx.cs410J.hui2;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import edu.pdx.cs410J.AbstractPhoneBill;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import edu.pdx.cs410J.AbstractPhoneCall;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import edu.pdx.cs410J.PhoneBillDumper;</a>
+<span class="sourceLineNo">006</span><a id="line.6"></a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.io.BufferedWriter;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.io.FileWriter;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.io.IOException;</a>
+<span class="sourceLineNo">010</span><a id="line.10"></a>
+<span class="sourceLineNo">011</span><a id="line.11">/**</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * The class that will implement the fucntions of writing the command line arguments to the text file</a>
+<span class="sourceLineNo">013</span><a id="line.13"> */</a>
+<span class="sourceLineNo">014</span><a id="line.14">public class TextDumper implements PhoneBillDumper {</a>
+<span class="sourceLineNo">015</span><a id="line.15">    String fileName;</a>
+<span class="sourceLineNo">016</span><a id="line.16">    String customerName;</a>
+<span class="sourceLineNo">017</span><a id="line.17">    String callerNumber;</a>
+<span class="sourceLineNo">018</span><a id="line.18">    String calleeNumber;</a>
+<span class="sourceLineNo">019</span><a id="line.19">    String startTime;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    String endTime;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    AbstractPhoneCall newPhoneCall;</a>
+<span class="sourceLineNo">022</span><a id="line.22">    AbstractPhoneBill totalPhoneBill;</a>
+<span class="sourceLineNo">023</span><a id="line.23"></a>
+<span class="sourceLineNo">024</span><a id="line.24">    /**</a>
+<span class="sourceLineNo">025</span><a id="line.25">     * This function is to write the information form the command line into the text file. It will also</a>
+<span class="sourceLineNo">026</span><a id="line.26">     * check if the object is null, if it is then we want to create a new object of phonebill and store</a>
+<span class="sourceLineNo">027</span><a id="line.27">     * the information.</a>
+<span class="sourceLineNo">028</span><a id="line.28">     * @param bill the phonebill that pass in from the command line</a>
+<span class="sourceLineNo">029</span><a id="line.29">     * @throws IOException it will throw an exception if the file location doesn't exit to create the file name</a>
+<span class="sourceLineNo">030</span><a id="line.30">     */</a>
+<span class="sourceLineNo">031</span><a id="line.31">    @Override</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public void dump(AbstractPhoneBill bill) throws IOException</a>
+<span class="sourceLineNo">033</span><a id="line.33">    {</a>
+<span class="sourceLineNo">034</span><a id="line.34">        AbstractPhoneBill phonebill = null;</a>
+<span class="sourceLineNo">035</span><a id="line.35">        BufferedWriter bw = null;</a>
+<span class="sourceLineNo">036</span><a id="line.36">        FileWriter fw = null;</a>
+<span class="sourceLineNo">037</span><a id="line.37">        bw = new BufferedWriter(new FileWriter(fileName, true));</a>
+<span class="sourceLineNo">038</span><a id="line.38">        bw.write(customerName + "," + callerNumber + "," + calleeNumber + "," + startTime + "," + endTime);</a>
+<span class="sourceLineNo">039</span><a id="line.39">        bw.newLine();</a>
+<span class="sourceLineNo">040</span><a id="line.40">        bw.flush();</a>
+<span class="sourceLineNo">041</span><a id="line.41">        if(bw!=null)</a>
+<span class="sourceLineNo">042</span><a id="line.42">            bw.close();</a>
+<span class="sourceLineNo">043</span><a id="line.43">        if(bill == null) {</a>
+<span class="sourceLineNo">044</span><a id="line.44">            phonebill = new PhoneBill(customerName, new PhoneCall(callerNumber, calleeNumber, startTime, endTime));</a>
+<span class="sourceLineNo">045</span><a id="line.45">            bill = phonebill;</a>
+<span class="sourceLineNo">046</span><a id="line.46">        }</a>
+<span class="sourceLineNo">047</span><a id="line.47">        else {</a>
+<span class="sourceLineNo">048</span><a id="line.48">            newPhoneCall = new PhoneCall(callerNumber, calleeNumber, startTime, endTime);</a>
+<span class="sourceLineNo">049</span><a id="line.49">            bill.addPhoneCall(newPhoneCall);</a>
+<span class="sourceLineNo">050</span><a id="line.50">        }</a>
+<span class="sourceLineNo">051</span><a id="line.51">        totalPhoneBill = bill;</a>
+<span class="sourceLineNo">052</span><a id="line.52"></a>
+<span class="sourceLineNo">053</span><a id="line.53">    }</a>
+<span class="sourceLineNo">054</span><a id="line.54"></a>
+<span class="sourceLineNo">055</span><a id="line.55">    /**</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * gets the file name</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * @param fileName store the file name</a>
+<span class="sourceLineNo">058</span><a id="line.58">     */</a>
+<span class="sourceLineNo">059</span><a id="line.59">    public void getFile(String fileName)</a>
+<span class="sourceLineNo">060</span><a id="line.60">    {</a>
+<span class="sourceLineNo">061</span><a id="line.61">        this.fileName = fileName;</a>
+<span class="sourceLineNo">062</span><a id="line.62">    }</a>
+<span class="sourceLineNo">063</span><a id="line.63"></a>
+<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * a constructor to take in the variables</a>
+<span class="sourceLineNo">066</span><a id="line.66">     * @param customer string contains customer name</a>
+<span class="sourceLineNo">067</span><a id="line.67">     * @param caller string contains the caller's phone number</a>
+<span class="sourceLineNo">068</span><a id="line.68">     * @param callee string contains the callee's phone number</a>
+<span class="sourceLineNo">069</span><a id="line.69">     * @param startTime string contains the start date and time</a>
+<span class="sourceLineNo">070</span><a id="line.70">     * @param endTime string contains the end date and time</a>
+<span class="sourceLineNo">071</span><a id="line.71">     */</a>
+<span class="sourceLineNo">072</span><a id="line.72">    TextDumper(String customer, String caller, String callee, String startTime, String endTime)</a>
+<span class="sourceLineNo">073</span><a id="line.73">    {</a>
+<span class="sourceLineNo">074</span><a id="line.74">        this.customerName = customer;</a>
+<span class="sourceLineNo">075</span><a id="line.75">        this.callerNumber = caller;</a>
+<span class="sourceLineNo">076</span><a id="line.76">        this.calleeNumber = callee;</a>
+<span class="sourceLineNo">077</span><a id="line.77">        this.startTime = startTime;</a>
+<span class="sourceLineNo">078</span><a id="line.78">        this.endTime = endTime;</a>
+<span class="sourceLineNo">079</span><a id="line.79">    }</a>
+<span class="sourceLineNo">080</span><a id="line.80"></a>
+<span class="sourceLineNo">081</span><a id="line.81">    /**</a>
+<span class="sourceLineNo">082</span><a id="line.82">     *</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * @return it returns the phonebill</a>
+<span class="sourceLineNo">084</span><a id="line.84">     */</a>
+<span class="sourceLineNo">085</span><a id="line.85">    public AbstractPhoneBill returnPhoneBill()</a>
+<span class="sourceLineNo">086</span><a id="line.86">    {</a>
+<span class="sourceLineNo">087</span><a id="line.87">        return totalPhoneBill;</a>
+<span class="sourceLineNo">088</span><a id="line.88">    }</a>
+<span class="sourceLineNo">089</span><a id="line.89">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.4.0" timestamp="2018-07-21T10:31:41.397">
+<file name="/Users/Jack/Documents/JavaProjectSummer/phonebill/src/main/java/edu/pdx/cs410J/hui2/PrettyPrinter.java">
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="32" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="PrettyPrinter" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.text.ParseException'
+</violation>
+</file>
+<file name="/Users/Jack/Documents/JavaProjectSummer/phonebill/src/main/java/edu/pdx/cs410J/hui2/Project3.java">
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="22" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="Project3" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.util.List'
+</violation>
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="23" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="Project3" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.util.Stack'
+</violation>
+<violation beginline="13" endline="13" begincolumn="1" endcolumn="24" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="Project3" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.util.Locale'
+</violation>
+<violation beginline="15" endline="15" begincolumn="1" endcolumn="28" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="Project3" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.util.Collection'
+</violation>
+<violation beginline="118" endline="119" begincolumn="9" endcolumn="45" rule="CollapsibleIfStatements" ruleset="Design" package="edu.pdx.cs410J.hui2" class="Project3" method="checkTimeLabel" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+<file name="/Users/Jack/Documents/JavaProjectSummer/phonebill/src/main/java/edu/pdx/cs410J/hui2/TextDumper.java">
+<violation beginline="36" endline="36" begincolumn="20" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextDumper" method="dump" variable="fw" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'fw'.
+</violation>
+</file>
+<file name="/Users/Jack/Documents/JavaProjectSummer/phonebill/src/main/java/edu/pdx/cs410J/hui2/TextParser.java">
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="38" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextParser" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'edu.pdx.cs410J.ParserException'
+</violation>
+<violation beginline="9" endline="9" begincolumn="8" endcolumn="25" rule="DuplicateImports" ruleset="Code Style" package="edu.pdx.cs410J.hui2" class="TextParser" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_codestyle.html#duplicateimports" priority="4">
+Avoid duplicate imports such as 'java.io.FileReader'
+</violation>
+<violation beginline="13" endline="13" begincolumn="1" endcolumn="24" rule="UnusedImports" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextParser" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedimports" priority="4">
+Avoid unused imports such as 'java.util.Locale'
+</violation>
+<violation beginline="42" endline="42" begincolumn="20" endcolumn="31" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextParser" method="parse" variable="customerName" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'customerName'.
+</violation>
+<violation beginline="53" endline="53" begincolumn="24" endcolumn="33" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextParser" method="parse" variable="startLabel" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'startLabel'.
+</violation>
+<violation beginline="56" endline="56" begincolumn="24" endcolumn="31" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.pdx.cs410J.hui2" class="TextParser" method="parse" variable="endLabel" externalInfoUrl="https://pmd.github.io/pmd-6.4.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'endLabel'.
+</violation>
+</file>
+</pmd>
