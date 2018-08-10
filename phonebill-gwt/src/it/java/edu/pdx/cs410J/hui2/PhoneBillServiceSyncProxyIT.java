@@ -11,7 +11,7 @@ import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 
 public class PhoneBillServiceSyncProxyIT extends HttpRequestHelper {
-
+/*
   private final int httpPort = Integer.getInteger("http.port", 8080);
   private String webAppUrl = "http://localhost:" + httpPort + "/phonebill";
 
@@ -31,5 +31,5 @@ public class PhoneBillServiceSyncProxyIT extends HttpRequestHelper {
     assertEquals("CS410J", bill.getCustomer());
     assertEquals(1, bill.getPhoneCalls().size());
   }
-
+*/
 }

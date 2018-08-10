@@ -2,26 +2,16 @@ package edu.pdx.cs410J.hui2.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
+import java.util.Map;
+import java.util.List;
 /**
- * A GWT remote service that returns a dummy Phone Bill
+ * A GWT remote service that returns a dummy Phone Bill. It will have three different functions, to add a new
+ * or existing customer, serach for phone bill for specific customer and print all of the phone call for that customer
  */
-@RemoteServiceRelativePath("phoneBill")
+@RemoteServiceRelativePath("addCustomer")
 public interface PhoneBillService extends RemoteService {
-
-  /**
-   * Returns the a dummy Phone Bill
-   */
-  public PhoneBill getPhoneBill();
-
-  /**
-   * Always throws an undeclared exception so that we can see GWT handles it.
-   */
-  void throwUndeclaredException();
-
-  /**
-   * Always throws a declared exception so that we can see GWT handles it.
-   */
-  void throwDeclaredException() throws IllegalStateException;
+  public void addCustomer(String customerName, PhoneCall call);
+  public Map<String,PhoneBill> printAll();
+  public List<PhoneCall> search(String customerName, String startTime, String endTime);
 
 }
